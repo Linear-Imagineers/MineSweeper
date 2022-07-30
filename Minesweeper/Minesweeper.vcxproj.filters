@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Frontend">
+      <UniqueIdentifier>{9e315aa3-b0b5-4b91-ac5f-f998c328acc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Game Screen">
+      <UniqueIdentifier>{29448a98-badc-4ed1-a2c8-c76b494d1d86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Start Menu">
+      <UniqueIdentifier>{d79c4643-c10b-413e-8206-0587b96a621e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend">
+      <UniqueIdentifier>{ccc40294-6e85-4b2d-9a74-d8726cf6c32f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Game Screen">
+      <UniqueIdentifier>{4365d7ba-e450-4b2d-91c6-8bc713935aa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Start Menu">
+      <UniqueIdentifier>{c853d901-9885-4e23-88df-e7e9b4f9a7a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Settings Menu">
+      <UniqueIdentifier>{1589fa1a-4c30-433f-97cb-026957c2e3b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Settings Menu">
+      <UniqueIdentifier>{b259a1ee-7b98-4245-b118-36c33f4ed634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Game Over Screen">
+      <UniqueIdentifier>{3d310135-4cf7-4866-ba6c-58d7eae1d16f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Game Over Screen">
+      <UniqueIdentifier>{ec09621c-fd92-41ed-b63f-7fb8889d8415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Backend">
+      <UniqueIdentifier>{87d9e0b3-1cfd-4b3a-a448-103f0a60391d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Backend">
+      <UniqueIdentifier>{8b0f42ad-e957-4ea5-8c4d-829ad6c6af0e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen.h">
+      <Filter>Header Files\Frontend\Game Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="StartMenu.h">
+      <Filter>Header Files\Frontend\Start Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsMenu.h">
+      <Filter>Header Files\Frontend\Settings Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverScreen.h">
+      <Filter>Header Files\Frontend\Game Over Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="MinesweeperGame.h">
+      <Filter>Header Files\Backend</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Minesweeper.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Minesweeper.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="StartMenu.cpp">
+      <Filter>Source Files\Frontend\Start Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScreen.cpp">
+      <Filter>Source Files\Frontend\Game Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsMenu.cpp">
+      <Filter>Source Files\Frontend\Settings Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverScreen.cpp">
+      <Filter>Source Files\Frontend\Game Over Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="MinesweeperGame.cpp">
+      <Filter>Source Files\Backend</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
