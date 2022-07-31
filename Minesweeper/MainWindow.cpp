@@ -35,7 +35,7 @@ bool MyApp::OnInit()
 {
     MainWindow* frame = new MainWindow();
     frame->Show(true);
-    return true;
+    return true; 
 }
 
 MainWindow::MainWindow()
