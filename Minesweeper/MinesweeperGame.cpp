@@ -10,9 +10,10 @@ MinesweeperGame::MinesweeperGame(int difficulty, bool solvable, int width, int h
 
 }
 
+// Competition
 void MinesweeperGame::populateGrid(int difficulty, bool solvable)
 {
-
+	// Also calculate nearby
 }
 
 
