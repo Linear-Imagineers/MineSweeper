@@ -8,9 +8,18 @@ class GameScreen : public wxPanel {
 public:
 	GameScreen(wxWindow* parent);
 
-	class tileButton : public wxButton {
+	void UpdateTile(wxCommandEvent& event);
+
+	class TileButton : public wxButton {	
+	public:
+		// Constructor
+		TileButton(wxWindow* parent, wxPoint pos, wxSize sz, int x, int y);
+
 		// Overrides the normal drawing function, draws button according to state
 		void Update() override;
+
+		//Coordinates in the grid
+		int x, y;
 
 	private:
 		//Every possible state for the tile
@@ -22,9 +31,12 @@ public:
 		};
 
 	};
-private:
+
 	// Dynamic array to all the tiles
-	tileButton** tiles = new tileButton * [];
+	TileButton*** tiles;
+
+private:
+
 protected:
 	// Pointer to the current game that is being played
 	MinesweeperGame* gameInstance;

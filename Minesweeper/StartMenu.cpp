@@ -8,9 +8,3 @@ StartMenu::StartMenu(wxWindow* parent) :
         //Create new game
             //switch to new scene (gamescreen)
 }
-
-MinesweeperGame StartMenu::startGame()
-{
-    //Instantiate game (from backend)
-    return MinesweeperGame();
-}
