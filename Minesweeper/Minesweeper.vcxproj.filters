@@ -85,6 +85,12 @@
     <Image Include="Minesweeper.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="flag.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\flag.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartMenu.cpp">

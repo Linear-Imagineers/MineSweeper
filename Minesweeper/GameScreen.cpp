@@ -16,6 +16,10 @@ GameScreen::GameScreen(wxWindow* parent) :
 	int GridWidth = 10;
 
 	int ButtonSize = 30;
+
+	// Set appropriate window size
+	parent->SetSize(GridWidth * ButtonSize + 17, GridHeight * ButtonSize + 40);
+
 	// Initialize grid
 	tiles = new TileButton ** [GridHeight];
 	for (int i = 0; i < GridHeight; i++) {
@@ -44,22 +48,42 @@ GameScreen::GameScreen(wxWindow* parent) :
 
 // Called when button is pressed
 void GameScreen::UpdateTile(wxCommandEvent& event) {
+	// Gets the object that triggered the event, and casts it to a button.
+	TileButton* ClickedTile = (TileButton*)event.GetEventObject();
+
 	// Change in backend
-	TileButton *clickedButton = (TileButton*)event.GetEventObject();
-	wxMessageBox("Clicked " + std::to_string(clickedButton->x) + " - " + std::to_string(clickedButton->y));
+	// (For now there is no backend)
+
 
 	// Changes internal state of the button
+	ClickedTile->CurrentState = TileButton::flag;
+	
 	// Changes are rendered by the Update() function of tile
 	// (Maybe invalidate tile)
-	
+	ClickedTile->Update();
 }
 
 // Might need to override different function
 void GameScreen::TileButton::Update()
 {
+	// Switch statement, to change bitmap according to state of tile
+	switch (CurrentState) {
+		case closed: {
+			this->SetLabel("0");
+			break;
+		}
+		case open: {
+			this->SetLabel("1");
+			break;
+		}
+		case flag: {
+			wxBitmap b = wxBitmap(wxT("flag.bmp"), wxBITMAP_TYPE_BMP);
+			this->SetBitmap(b);
+			this->SetLabel("");
+		}
+	}
 	// Change bitmaps according to state 
 	__super::Update();
-	
 }
 
 // This is the constructor of the TileButton class. We want it to create a normal button,
@@ -70,5 +94,9 @@ GameScreen::TileButton::TileButton(wxWindow* parent, wxPoint pos, wxSize sz, int
 {
 	this->x = x;
 	this->y = y;
+
+	// Set current tile state
+	this->CurrentState = closed;
+	Update();
 }
 

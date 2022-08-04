@@ -1,6 +1,7 @@
 #pragma once
 #include <wx/panel.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
 
 #include "MinesweeperGame.h"
 
@@ -21,7 +22,9 @@ public:
 		//Coordinates in the grid
 		int x, y;
 
-	private:
+		//Keeps track of the current state of the tile
+		int CurrentState;
+
 		//Every possible state for the tile
 		enum TileState {
 			flag = 0,

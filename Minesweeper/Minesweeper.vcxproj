@@ -163,6 +163,8 @@
     <ResourceCompile Include="Minesweeper.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\flag.bmp" />
+    <Image Include="flag.bmp" />
     <Image Include="Minesweeper.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
