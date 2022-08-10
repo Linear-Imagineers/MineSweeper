@@ -8,3 +8,11 @@ StartMenu::StartMenu(wxWindow* parent) :
         //Create new game
             //switch to new scene (gamescreen)
 }
+
+MinesweeperGame StartMenu::startGame()
+{
+    // Create an instance backend
+
+    // Switch the panel to game screen
+    // pass instance of backend to game screen
+}
