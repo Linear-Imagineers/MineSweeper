@@ -38,9 +38,6 @@ GameScreen::GameScreen(wxWindow* parent) :
 		}
 	}
 	// Draw settings button
-
-
-	// Make buttons interactable
 	
 
 	// If game is over -> game over screen or winning screen
