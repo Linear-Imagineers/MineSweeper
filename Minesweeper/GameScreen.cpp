@@ -47,16 +47,25 @@ GameScreen::GameScreen(wxWindow* parent) :
 void GameScreen::UpdateTile(wxCommandEvent& event) {
 	// Gets the object that triggered the event, and casts it to a button.
 	TileButton* ClickedTile = (TileButton*)event.GetEventObject();
-
-	// Change in backend
-	// (For now there is no backend)
-
-
+	
+	// In case rightclicked on button (check it with event object?)
+	//if (/*when right clicked*/) {
+		if (ClickedTile->CurrentState == TileButton::flag) {
+			ClickedTile->CurrentState == TileButton::closed;
+		}
+		else if (ClickedTile->CurrentState == TileButton::closed) {
+			ClickedTile->CurrentState == TileButton::flag;
+		}
+	//}
+	// keep track of amount of flags so you can display [bombs - flags = bombs left]
+	//updateGrid in MineSweeperGame
+	
 	// Changes internal state of the button
-	ClickedTile->CurrentState = TileButton::flag;
+	ClickedTile->CurrentState = TileButton::open;
 	
 	// Changes are rendered by the Update() function of tile
-	// (Maybe invalidate tile)
+	// (Maybe invalidate tile) 
+	// button can be turned off if its open so you can't click it again?
 	ClickedTile->Update();
 }
 
