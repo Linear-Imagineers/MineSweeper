@@ -1,5 +1,7 @@
 .vs
-MineSweeper/.vs
-MineSweeper/x64
+Minesweeper/.vs
+Minesweeper/x64
 WxWidgets
-MineSweeper/Minesweeper.vcxproj
+Minesweeper/Minesweeper.vcxproj
+Minesweeper/Minesweeper.vcxproj.user
+Minesweeper/Minesweeper.aps
