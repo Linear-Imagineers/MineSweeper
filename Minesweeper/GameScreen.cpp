@@ -2,6 +2,12 @@
 #include <wx/msgdlg.h>
 #include <wx/panel.h>
 #include <wx/wx.h>
+//do we need the following:
+#include <string>
+#include <sstream>
+#include <iostream>
+using namespace std;
+
 
 GameScreen::GameScreen(wxWindow* parent) :
 	wxPanel(parent)
@@ -12,7 +18,11 @@ GameScreen::GameScreen(wxWindow* parent) :
 	int gridHeight = 10;
 	int gridWidth = 10;
 
+
 	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
+
+	gameInstance = new MinesweeperGame(1, false, GridWidth, GridHeight);
+
 	// Set appropriate window size
 	parent->SetSize(gridWidth * wxTile::size + 17, gridHeight * wxTile::size + 40);
 
@@ -20,6 +30,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 	wxGridSizer* sizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
 
 	// Initialize grid
+
 	tiles = new wxTile ** [gridHeight];
 	for (int y = 0; y < gridHeight; y++) {
 		tiles[y] = new wxTile*[gridWidth];
@@ -45,6 +56,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 	// TODO figure out why this only works well after adding all tiles
 	Bind(wxEVT_SIZE, &GameScreen::resize, this);
 
+
 	// TODO Draw settings button
 }
 
@@ -66,6 +78,7 @@ GameScreen::wxTile::wxTile(wxWindow* parent, int x, int y)  :
 
 void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
 {
+
 	// Create wxPaintDC instance, required for painting
 	wxPaintDC dc(this);
 
@@ -82,6 +95,7 @@ void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
 		fileName = "closed.bmp";
 		break;
 	case open:
+  //can use this here: gameInstance->getTileNumber(this->x, this->y);
 		fileName = "open.bmp";
 		break;
 	}
@@ -98,9 +112,16 @@ void GameScreen::wxTile::leftClick(wxMouseEvent& event)
 		return;
 	}
 
-	// TODO contact backend and handle response appropriately
-
-	this->state = State::open;
+	// TODO contact backend and handle response appropriately, could be like this
+  if (gameInstance->updateGrid(this->x, this->y)) {
+			this->state = State::open;
+		}
+		else {
+			this->state = State::bomb; 
+		}
+	// keep track of amount of flags so you can display [bombs - flags = bombs left]
+  
+	//this->state = State::open;
 
 	// Update the displayed (bitmap) state
 	this->Refresh();
@@ -111,10 +132,12 @@ void GameScreen::wxTile::rightClick(wxMouseEvent& event)
 	if (this->state == State::closed) {
 		// Flag a closed tile
 		this->state = State::flag;
+    currentFlags++;
 	}
 	else if (this->state == State::flag) {
 		// Unflag a flagged tile
 		this->state = State::closed;
+    currentFlags--;
 	}
 	else {
 		return;
@@ -135,3 +158,4 @@ wxBEGIN_EVENT_TABLE(GameScreen::wxTile, wxPanel)
 	EVT_PAINT(wxTile::paintEvent)
 
 wxEND_EVENT_TABLE()
+

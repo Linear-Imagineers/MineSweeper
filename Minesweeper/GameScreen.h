@@ -11,6 +11,7 @@ public:
 	// GameScreen constructor
 	GameScreen(wxWindow* parent);
 
+
 	// Event listener for size changes
 	void resize(wxSizeEvent& event);
 
@@ -50,12 +51,13 @@ public:
 		// Required for the event table in the implementation file (see https://docs.wxwidgets.org/3.2/overview_events.html)
 		wxDECLARE_EVENT_TABLE();
 	};
-
+	
 	// Dynamic array to all the tiles
 	wxTile*** tiles;
 
 private:
-
+	// Keep track of the amount of current flags on the grid
+	int currentFlags = 0;
 protected:
 	// Pointer to the current game that is being played
 	MinesweeperGame* gameInstance;
