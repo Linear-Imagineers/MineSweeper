@@ -1,5 +1,9 @@
 #include "GameScreen.h"
 #include <wx/msgdlg.h>
+#include <string>
+#include <sstream>
+#include <iostream>
+using namespace std;
 
 enum {
 	ButtonID = 2
@@ -83,6 +87,11 @@ void GameScreen::UpdateTile(wxCommandEvent& event) {
 // Might need to override different function
 void GameScreen::TileButton::Update()
 {
+	int num = 3;//gameInstance->getTileNumber(this->x, this->y);
+	stringstream ss;
+	std::string number;
+	ss << num;
+	ss >> number;
 	// Switch statement, to change bitmap according to state of tile
 	switch (CurrentState) {
 		case closed: {
@@ -90,7 +99,7 @@ void GameScreen::TileButton::Update()
 			break;
 		}
 		case open: {
-			this->SetLabel("1");
+			this->SetLabel(number);
 			break;
 		}
 		case flag: {
@@ -116,4 +125,3 @@ GameScreen::TileButton::TileButton(wxWindow* parent, wxPoint pos, wxSize sz, int
 	this->CurrentState = closed;
 	Update();
 }
-

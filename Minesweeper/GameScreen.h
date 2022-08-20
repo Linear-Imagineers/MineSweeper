@@ -34,7 +34,7 @@ public:
 		};
 
 	};
-
+	
 	// Dynamic array to all the tiles
 	TileButton*** tiles;
 

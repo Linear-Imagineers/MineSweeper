@@ -22,6 +22,7 @@ MinesweeperGame::MinesweeperGame(int difficulty, bool solvable, int width, int h
 // Competition
 void MinesweeperGame::populateBombsGrid(int difficulty, bool solvable)
 {
+	// make an array of x and y coordinates for where the bombs go.
 	bombsAmount = 2;
 	bombs = new int* [bombsAmount];
 	for (int i = 0; i < bombsAmount; i++) {
