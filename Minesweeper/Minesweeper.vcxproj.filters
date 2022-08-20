@@ -88,7 +88,13 @@
     <Image Include="flag.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\flag.bmp">
+    <Image Include="open.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bomb.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="closed.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
