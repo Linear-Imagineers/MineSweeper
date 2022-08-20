@@ -1,99 +1,137 @@
 #include "GameScreen.h"
 #include <wx/msgdlg.h>
-
-enum {
-	ButtonID = 2
-};
+#include <wx/panel.h>
+#include <wx/wx.h>
 
 GameScreen::GameScreen(wxWindow* parent) :
 	wxPanel(parent)
 {
-	//Bind Click event to update function
-	Bind(wxEVT_BUTTON, &GameScreen::UpdateTile, this, ButtonID);
+	// TODO backend initialization
 
-	//GridWidth should be derived from gameInstance, but that hasn't been implemented yet
-	int GridHeight = 10;
-	int GridWidth = 10;
+	// TODO width and height should be derived from gameInstance, but that hasn't been implemented yet
+	int gridHeight = 10;
+	int gridWidth = 10;
 
-	int ButtonSize = 30;
-
+	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
 	// Set appropriate window size
-	parent->SetSize(GridWidth * ButtonSize + 17, GridHeight * ButtonSize + 40);
+	parent->SetSize(gridWidth * wxTile::size + 17, gridHeight * wxTile::size + 40);
+
+	// A wxGridSizer will allign all the tiles in a grid formation
+	wxGridSizer* sizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
 
 	// Initialize grid
-	tiles = new TileButton ** [GridHeight];
-	for (int i = 0; i < GridHeight; i++) {
-		tiles[i] = new TileButton*[GridWidth];
+	tiles = new wxTile ** [gridHeight];
+	for (int y = 0; y < gridHeight; y++) {
+		tiles[y] = new wxTile*[gridWidth];
 	}
+
 	// Draw the grid
-	for (int i = 0; i < GridHeight; i++) {
-		for (int j = 0; j < GridWidth; j++) {
-			// Coordinate of new button
-			wxPoint ButtonPos = wxPoint(i * ButtonSize, j * ButtonSize);
-			// WxSize object of size, to pass to the button constructor
-			wxSize _ButtonSize = wxSize(ButtonSize, ButtonSize);
-			
-			// Instantiate new TileButton object
-			tiles[i][j] = new TileButton(this, ButtonPos, _ButtonSize, i, j);
+	for (int x = 0; x < gridWidth; x++) {
+		for (int y = 0; y < gridHeight; y++) {
+			// Instantiate new wxTile object
+			tiles[y][x] = new wxTile(this, y, x);
+
+			// Add wxTile object to the grid sizer
+			// The order in which items are added to the sizer matters:
+			//   (0,0), (0,1) then (0,2) etc
+			sizer->Add(tiles[y][x]);
 		}
 	}
-	// Draw settings button
-	
 
-	// If game is over -> game over screen or winning screen
+	// Add sizer to the wxPanel and make it fit all tiles
+	this->SetSizerAndFit(sizer);
+
+	// Bind the resize event
+	// TODO figure out why this only works well after adding all tiles
+	Bind(wxEVT_SIZE, &GameScreen::resize, this);
+
+	// TODO Draw settings button
 }
 
-// Called when button is pressed
-void GameScreen::UpdateTile(wxCommandEvent& event) {
-	// Gets the object that triggered the event, and casts it to a button.
-	TileButton* ClickedTile = (TileButton*)event.GetEventObject();
-
-	// Change in backend
-	// (For now there is no backend)
-
-
-	// Changes internal state of the button
-	ClickedTile->CurrentState = TileButton::flag;
-	
-	// Changes are rendered by the Update() function of tile
-	// (Maybe invalidate tile)
-	ClickedTile->Update();
+void GameScreen::resize(wxSizeEvent& event) {
+	Refresh();
 }
 
-// Might need to override different function
-void GameScreen::TileButton::Update()
+GameScreen::wxTile::wxTile(wxWindow* parent, int x, int y)  : 
+	wxWindow(parent, wxID_ANY)
 {
-	// Switch statement, to change bitmap according to state of tile
-	switch (CurrentState) {
-		case closed: {
-			this->SetLabel("0");
-			break;
-		}
-		case open: {
-			this->SetLabel("1");
-			break;
-		}
-		case flag: {
-			wxBitmap b = wxBitmap(wxT("flag.bmp"), wxBITMAP_TYPE_BMP);
-			this->SetBitmap(b);
-			this->SetLabel("");
-		}
-	}
-	// Change bitmaps according to state 
-	__super::Update();
-}
-
-// This is the constructor of the TileButton class. We want it to create a normal button,
-// but we created a new class to add a few member variables to it. Therefore, we just want to call
-// the constructor of the wxButton class when we construct this class.
-GameScreen::TileButton::TileButton(wxWindow* parent, wxPoint pos, wxSize sz, int x, int y) :
-	wxButton(parent, ButtonID, wxEmptyString, pos, sz)
-{
+	// Initialize variables
 	this->x = x;
 	this->y = y;
+	this->state = State::closed;
 
-	// Set current tile state
-	this->CurrentState = closed;
-	Update();
+	// Set minimum size of the tile
+	SetMinSize(wxSize(size, size));
 }
 
+void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
+{
+	// Create wxPaintDC instance, required for painting
+	wxPaintDC dc(this);
+
+	// Get file name of bitmap resource associated with the current state
+	std::string fileName;
+	switch (this->state) {
+	case flag:
+		fileName = "flag.bmp";
+		break;
+	case bomb:
+		fileName = "bomb.bmp";
+		break;
+	case closed:
+		fileName = "closed.bmp";
+		break;
+	case open:
+		fileName = "open.bmp";
+		break;
+	}
+
+	// TODO load bitmaps much earlier, store in State enum if possible
+	// Draw the bitmap
+	dc.DrawBitmap(wxBitmap(wxT("" + fileName), wxBITMAP_TYPE_BMP), 0, 0);
+}
+
+void GameScreen::wxTile::leftClick(wxMouseEvent& event)
+{
+	// Only closed tiles can be opened
+	if (this->state != State::closed) {
+		return;
+	}
+
+	// TODO contact backend and handle response appropriately
+
+	this->state = State::open;
+
+	// Update the displayed (bitmap) state
+	this->Refresh();
+}
+
+void GameScreen::wxTile::rightClick(wxMouseEvent& event)
+{
+	if (this->state == State::closed) {
+		// Flag a closed tile
+		this->state = State::flag;
+	}
+	else if (this->state == State::flag) {
+		// Unflag a flagged tile
+		this->state = State::closed;
+	}
+	else {
+		return;
+	}
+	
+	// Update the displayed (bitmap) state
+	this->Refresh();
+}
+
+// Event table for wxTile, defines which methods are called for which events
+wxBEGIN_EVENT_TABLE(GameScreen::wxTile, wxPanel)
+
+	// Bind left and right click events
+	EVT_LEFT_DOWN(wxTile::leftClick)
+	EVT_RIGHT_DOWN(wxTile::rightClick)
+
+	// Bind paint event
+	EVT_PAINT(wxTile::paintEvent)
+
+wxEND_EVENT_TABLE()
