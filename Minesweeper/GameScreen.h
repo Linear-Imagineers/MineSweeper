@@ -8,15 +8,17 @@
 
 class GameScreen : public wxPanel {
 public:
+	// GameScreen constructor
 	GameScreen(wxWindow* parent);
 
+	// Event listener for size changes
 	void resize(wxSizeEvent& event);
 
-	// A tile in the grid
+	// A visual tile in the grid
 	// For some reference, see https://wiki.wxwidgets.org/Painting_your_custom_control
 	class wxTile : public wxWindow {
 	public:
-		// Constructor
+		// wxTile constructor
 		wxTile(wxWindow* parent, int x, int y);
 
 		// The state of a tile
@@ -30,11 +32,8 @@ public:
 		// The UI size of tiles
 		static const int size = 30;
 
-		// Paint event
+		// Paint event handler
 		void paintEvent(wxPaintEvent& evt);
-
-		// Rendering method
-		void render(wxDC& dc);
 
 		// Left click event handler
 		void leftClick(wxMouseEvent& event);
@@ -44,10 +43,6 @@ public:
 	private:
 		// The coordinates of this tile
 		int x, y;
-
-		// TODO remove, debugging
-		// The amount of times this tile was painted
-		int paints;
 		
 		// The state of this tile
 		State state;
