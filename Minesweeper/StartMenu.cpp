@@ -16,4 +16,4 @@ StartMenu::StartMenu(wxWindow* parent) :
     // Switch the panel to game screen
     // pass instance of backend to game screen
 //}
-
+*/

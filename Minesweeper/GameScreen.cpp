@@ -21,7 +21,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 
 	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
 
-	gameInstance = new MinesweeperGame(1, false, GridWidth, GridHeight);
+	gameInstance = new MinesweeperGame(1, false, gridWidth, gridHeight);
 
 	// Set appropriate window size
 	parent->SetSize(gridWidth * wxTile::size + 17, gridHeight * wxTile::size + 40);
@@ -113,12 +113,12 @@ void GameScreen::wxTile::leftClick(wxMouseEvent& event)
 	}
 
 	// TODO contact backend and handle response appropriately, could be like this
-  if (gameInstance->updateGrid(this->x, this->y)) {
+  //if (gameInstance->updateGrid(this->x, this->y)) {
 			this->state = State::open;
-		}
-		else {
-			this->state = State::bomb; 
-		}
+//		}
+	//	else {
+	//		this->state = State::bomb; 
+	//	}
 	// keep track of amount of flags so you can display [bombs - flags = bombs left]
   
 	//this->state = State::open;
@@ -132,12 +132,12 @@ void GameScreen::wxTile::rightClick(wxMouseEvent& event)
 	if (this->state == State::closed) {
 		// Flag a closed tile
 		this->state = State::flag;
-    currentFlags++;
+    //currentFlags++;
 	}
 	else if (this->state == State::flag) {
 		// Unflag a flagged tile
 		this->state = State::closed;
-    currentFlags--;
+    //currentFlags--;
 	}
 	else {
 		return;
