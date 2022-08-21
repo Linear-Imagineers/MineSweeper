@@ -52,7 +52,7 @@ public:
 		// Required for the event table in the implementation file (see https://docs.wxwidgets.org/3.2/overview_events.html)
 		wxDECLARE_EVENT_TABLE();
 	};
-	
+
 	// Dynamic array to all the tiles
 	wxTile*** tiles;
 
