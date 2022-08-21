@@ -49,9 +49,28 @@ void MinesweeperGame::populateNumbersGrid() {
 	// make empty grid or fill the grid with 0's, which is done in the constructor.
 	// go through array with coordinates of bombs and call addBombToGrid
 	// put -1 on bomb locations and increase numbers around it in the grid by one.
+
 	for (int i = 0; i < bombsAmount; i++) {
-		grid[bombs[i][1]][bombs[i][0]] = -1;
-		if (grid[bombs[i][1] - 1][bombs[i][0] - 1] >= 0) {
+		// Bombs is 2d array, i'th bomb at (bomb[i][1], bomb[i][0])
+		int y = bombs[i][1];
+		int x = bombs[i][0];
+
+		grid[y][x] = -1;
+		
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				if (i == j == 0) continue; // Skip middle tile
+				// Check whether adjacent tile is within grid
+				if (y + i >= 0 && y + i < gridHeight && x + j >= 0 && x + j < gridWidth) {
+					// Add one to adjacent tile
+					grid[y + i][x + j]++;
+				}
+			}
+		}
+		
+	}
+	/*
+	if (grid[bombs[i][1] - 1][bombs[i][0] - 1] >= 0) {
 			grid[bombs[i][1] - 1][bombs[i][0] - 1]++;
 		}
 		if (grid[bombs[i][1] - 1][bombs[i][0]] >= 0) {
@@ -74,8 +93,7 @@ void MinesweeperGame::populateNumbersGrid() {
 		}
 		if (grid[bombs[i][1] + 1][bombs[i][0] + 1] >= 0) {
 			grid[bombs[i][1] + 1][bombs[i][0] + 1]++;
-		}
-	}
+		}*/
 	gameState = GameState::active;
 }
 

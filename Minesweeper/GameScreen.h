@@ -11,7 +11,6 @@ public:
 	// GameScreen constructor
 	GameScreen(wxWindow* parent);
 
-
 	// Event listener for size changes
 	void resize(wxSizeEvent& event);
 
@@ -20,7 +19,7 @@ public:
 	class wxTile : public wxWindow {
 	public:
 		// wxTile constructor
-		wxTile(wxWindow* parent, int x, int y);
+		wxTile(GameScreen* gameScreen, int x, int y);
 
 		// The state of a tile
 		enum State {
@@ -42,9 +41,11 @@ public:
 		void rightClick(wxMouseEvent& event);
 
 	private:
+		GameScreen* gameScreen;
+
 		// The coordinates of this tile
 		int x, y;
-
+		
 		// The state of this tile
 		State state;
 
