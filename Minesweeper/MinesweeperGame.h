@@ -3,9 +3,9 @@ class MinesweeperGame
 {
 	//example
 public:
-	// Constructor, instantiates a game of certain difficulty.
+	// Constructor, instantiates a game of certain amount of bombs.
 	// Also specifies whether game should be beaten with logic
-	MinesweeperGame(int difficulty, bool solvable, int width, int height);
+	MinesweeperGame(int bombsAmount, bool solvable, int width, int height);
 	//MinesweeperGame();
 	// Method to update the grid, when a particular tile has been pressed
 	bool updateGrid(int x, int y);
@@ -15,13 +15,15 @@ public:
 	int gridWidth, gridHeight;
 private:
 	// Method to populate the grid with bombs
-	void populateBombsGrid(int difficulty, bool solvable);
+	void populateBombsGrid(int bombsAmount, bool solvable);
 	// Method to populate the grid with the numbers according to the bombs
 	void populateNumbersGrid();
 
 
 	// Points to the array where will store the grid
 	int** grid;
+	// Points to the array where boolean value of open or closed is stored for each tile of the grid
+	int** openedGrid;
 	// Keeps track if the game is still running when true or if it is a game over when false
 	enum GameState {
 		// states can still be changed

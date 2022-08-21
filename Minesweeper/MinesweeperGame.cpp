@@ -1,6 +1,6 @@
 #include "MinesweeperGame.h"
 
-MinesweeperGame::MinesweeperGame(int difficulty, bool solvable, int width, int height)
+MinesweeperGame::MinesweeperGame(int bombsAmount, bool solvable, int width, int height)
 {
 	gridHeight = height;
 	gridWidth = width;
@@ -16,14 +16,21 @@ MinesweeperGame::MinesweeperGame(int difficulty, bool solvable, int width, int h
 	// -1 = bomb
 	// 0-8 = number of bombs surrounding it
 	// grid[y(height)][x(width)]
-	populateBombsGrid(difficulty, solvable);
+
+	openedGrid = new int* [height];
+	for (int i = 0; i < height; i++) {
+		openedGrid[i] = new int[width];
+		for (int j = 0; j < width; j++) {
+			openedGrid[i][j] = false;
+		}
+	}
+	populateBombsGrid(bombsAmount, solvable);
 }
 
 // Competition
-void MinesweeperGame::populateBombsGrid(int difficulty, bool solvable)
+void MinesweeperGame::populateBombsGrid(int bombsAmount, bool solvable)
 {
 	// make an array of x and y coordinates for where the bombs go.
-	bombsAmount = 2;
 	bombs = new int* [bombsAmount];
 	for (int i = 0; i < bombsAmount; i++) {
 		bombs[i] = new int[2];
@@ -69,31 +76,6 @@ void MinesweeperGame::populateNumbersGrid() {
 		}
 		
 	}
-	/*
-	if (grid[bombs[i][1] - 1][bombs[i][0] - 1] >= 0) {
-			grid[bombs[i][1] - 1][bombs[i][0] - 1]++;
-		}
-		if (grid[bombs[i][1] - 1][bombs[i][0]] >= 0) {
-			grid[bombs[i][1] - 1][bombs[i][0]]++;
-		}
-		if (grid[bombs[i][1] - 1][bombs[i][0] + 1] >= 0) {
-			grid[bombs[i][1] - 1][bombs[i][0] + 1]++;
-		}
-		if (grid[bombs[i][1]][bombs[i][0] - 1] >= 0) {
-			grid[bombs[i][1]][bombs[i][0] - 1]++;
-		}
-		if (grid[bombs[i][1]][bombs[i][0] + 1] >= 0) {
-			grid[bombs[i][1]][bombs[i][0] + 1]++;
-		}
-		if (grid[bombs[i][1] + 1][bombs[i][0] - 1] >= 0) {
-			grid[bombs[i][1] + 1][bombs[i][0] - 1]++;
-		}
-		if (grid[bombs[i][1] + 1][bombs[i][0]] >= 0) {
-			grid[bombs[i][1] + 1][bombs[i][0]]++;
-		}
-		if (grid[bombs[i][1] + 1][bombs[i][0] + 1] >= 0) {
-			grid[bombs[i][1] + 1][bombs[i][0] + 1]++;
-		}*/
 	gameState = GameState::active;
 }
 
@@ -107,24 +89,31 @@ bool MinesweeperGame::updateGrid(int x, int y)
 		// if left clicked if there is a bomb or not
 			// if there is a bomb gameover return false (keep track somewhere that its gameover)
 			// if there is no bomb return true 
-	if (gameState == GameState::active) {
+	if (gameState == GameState::active && openedGrid[y][x] == false) {
 		if (grid[y][x] == -1) {
 			gameState = GameState::lost;
+			openedGrid[y][x] = true;
 			return false;
 		}
 		else {
+			openedGrid[y][x] = true;
 			return true;
 		}
 	}
 	else {
-		//error?
+		//error?, either game is not active yet/anymore or the tile was already opened once.
 		return false;
 	}
 }
 
 // Return number so that the front end can display it if its open.
 int MinesweeperGame::getTileNumber(int x, int y) {
-	return grid[y][x];
-	// error if its a bomb?
+	if (openedGrid[y][x] == true) {
+		return grid[y][x];
+	}
+	else {
+		// error if its a bomb or if it is not an open tile
+		return -10;
+	}
 }
 
