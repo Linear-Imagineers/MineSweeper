@@ -8,12 +8,12 @@ public:
 	MinesweeperGame(int bombsAmount, bool solvable, int width, int height);
 	//MinesweeperGame();
 	// Method to update the grid, when a particular tile has been pressed
-	bool updateGrid(int x, int y);
+	bool revealTile(int x, int y);
 	// Method to get the number of a tile to display, where -1 is a bomb and 0-8 are numbers to display.
 	int getTileNumber(int x, int y);
 
-	int gridWidth, gridHeight;
 private:
+	int gridWidth, gridHeight;
 	// Method to populate the grid with bombs
 	void populateBombsGrid(int bombsAmount, bool solvable);
 	// Method to populate the grid with the numbers according to the bombs
@@ -23,7 +23,7 @@ private:
 	// Points to the array where will store the grid
 	int** grid;
 	// Points to the array where boolean value of open or closed is stored for each tile of the grid
-	int** openedGrid;
+	bool** openedGrid;
 	// Keeps track if the game is still running when true or if it is a game over when false
 	enum GameState {
 		// states can still be changed
