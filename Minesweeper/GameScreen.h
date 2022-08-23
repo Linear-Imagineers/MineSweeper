@@ -16,10 +16,10 @@ public:
 
 	// A visual tile in the grid
 	// For some reference, see https://wiki.wxwidgets.org/Painting_your_custom_control
-	class wxTile : public wxWindow {
+	class Tile : public wxWindow {
 	public:
 		// wxTile constructor
-		wxTile(GameScreen* gameScreen, int x, int y);
+		Tile(GameScreen* gameScreen, int x, int y);
 
 		// The state of a tile
 		enum State {
@@ -53,13 +53,13 @@ public:
 		wxDECLARE_EVENT_TABLE();
 	};
 
-	// Dynamic array to all the tiles
-	wxTile*** tiles;
-
 private:
-	// Keep track of the amount of current flags on the grid
-	int currentFlags = 0;
-protected:
 	// Pointer to the current game that is being played
 	MinesweeperGame* gameInstance;
+
+	// Keep track of the amount of current flags on the grid
+	int currentFlags = 0;
+
+	// Dynamic array to all the tiles
+	Tile*** tiles;
 };

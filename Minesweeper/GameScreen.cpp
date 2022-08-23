@@ -16,22 +16,22 @@ GameScreen::GameScreen(wxWindow* parent) :
 
 	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
 	// Set appropriate window size
-	parent->SetSize(gridWidth * wxTile::size + 17, gridHeight * wxTile::size + 40);
+	parent->SetSize(gridWidth * Tile::size + 17, gridHeight * Tile::size + 40);
 
 	// A wxGridSizer will allign all the tiles in a grid formation
 	wxGridSizer* sizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
 
 	// Initialize grid
-	tiles = new wxTile ** [gridHeight];
+	tiles = new Tile ** [gridHeight];
 	for (int y = 0; y < gridHeight; y++) {
-		tiles[y] = new wxTile*[gridWidth];
+		tiles[y] = new Tile*[gridWidth];
 	}
 
 	// Draw the grid
 	for (int x = 0; x < gridWidth; x++) {
 		for (int y = 0; y < gridHeight; y++) {
 			// Instantiate new wxTile object
-			tiles[y][x] = new wxTile(this, y, x);
+			tiles[y][x] = new Tile(this, y, x);
 
 			// Add wxTile object to the grid sizer
 			// The order in which items are added to the sizer matters:
@@ -54,7 +54,7 @@ void GameScreen::resize(wxSizeEvent& event) {
 	Refresh();
 }
 
-GameScreen::wxTile::wxTile(GameScreen* gameScreen, int x, int y) : 
+GameScreen::Tile::Tile(GameScreen* gameScreen, int x, int y) : 
 	wxWindow(gameScreen, wxID_ANY)
 {
 	// Initialize variables
@@ -67,7 +67,7 @@ GameScreen::wxTile::wxTile(GameScreen* gameScreen, int x, int y) :
 	SetMinSize(wxSize(size, size));
 }
 
-void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
+void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 {
 	// Create wxPaintDC instance, required for painting
 	wxPaintDC dc(this);
@@ -99,7 +99,7 @@ void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
 	}
 }
 
-void GameScreen::wxTile::leftClick(wxMouseEvent& event)
+void GameScreen::Tile::leftClick(wxMouseEvent& event)
 {
 	// Only closed tiles can be opened
 	if (this->state != State::closed) {
@@ -114,7 +114,7 @@ void GameScreen::wxTile::leftClick(wxMouseEvent& event)
 	this->Refresh();
 }
 
-void GameScreen::wxTile::rightClick(wxMouseEvent& event)
+void GameScreen::Tile::rightClick(wxMouseEvent& event)
 {
 	if (this->state == State::closed) {
 		// Flag a closed tile
@@ -135,13 +135,13 @@ void GameScreen::wxTile::rightClick(wxMouseEvent& event)
 }
 
 // Event table for wxTile, defines which methods are called for which events
-wxBEGIN_EVENT_TABLE(GameScreen::wxTile, wxPanel)
+wxBEGIN_EVENT_TABLE(GameScreen::Tile, wxPanel)
 
 	// Bind left and right click events
-	EVT_LEFT_DOWN(wxTile::leftClick)
-	EVT_RIGHT_DOWN(wxTile::rightClick)
+	EVT_LEFT_DOWN(Tile::leftClick)
+	EVT_RIGHT_DOWN(Tile::rightClick)
 
 	// Bind paint event
-	EVT_PAINT(wxTile::paintEvent)
+	EVT_PAINT(Tile::paintEvent)
 
 wxEND_EVENT_TABLE()
