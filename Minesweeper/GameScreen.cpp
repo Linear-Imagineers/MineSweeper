@@ -12,6 +12,8 @@ GameScreen::GameScreen(wxWindow* parent) :
 	int gridHeight = 10;
 	int gridWidth = 10;
 
+	gameInstance = new MinesweeperGame(1, false, gridWidth, gridHeight);
+
 	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
 	// Set appropriate window size
 	parent->SetSize(gridWidth * wxTile::size + 17, gridHeight * wxTile::size + 40);
@@ -52,10 +54,11 @@ void GameScreen::resize(wxSizeEvent& event) {
 	Refresh();
 }
 
-GameScreen::wxTile::wxTile(wxWindow* parent, int x, int y)  : 
-	wxWindow(parent, wxID_ANY)
+GameScreen::wxTile::wxTile(GameScreen* gameScreen, int x, int y) : 
+	wxWindow(gameScreen, wxID_ANY)
 {
 	// Initialize variables
+	this->gameScreen = gameScreen;
 	this->x = x;
 	this->y = y;
 	this->state = State::closed;
@@ -72,23 +75,28 @@ void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
 	// Get file name of bitmap resource associated with the current state
 	std::string fileName;
 	switch (this->state) {
-	case flag:
-		fileName = "flag.bmp";
-		break;
-	case bomb:
-		fileName = "bomb.bmp";
-		break;
-	case closed:
-		fileName = "closed.bmp";
-		break;
-	case open:
-		fileName = "open.bmp";
-		break;
+		case flag:
+			fileName = "flag.bmp";
+			break;
+		case bomb:
+			fileName = "bomb.bmp";
+			break;
+		case closed:
+			fileName = "closed.bmp";
+			break;
+		case open:
+			fileName = "open.bmp";
+			break;
 	}
 
 	// TODO load bitmaps much earlier, store in State enum if possible
 	// Draw the bitmap
 	dc.DrawBitmap(wxBitmap(wxT("" + fileName), wxBITMAP_TYPE_BMP), 0, 0);
+
+	if (this->state == State::open) {
+		int num = 3; // gameInstance->getTileNumber(this->x, this->y);
+		dc.DrawText(std::to_string(num), wxPoint(5, 5));
+	}
 }
 
 void GameScreen::wxTile::leftClick(wxMouseEvent& event)
@@ -111,10 +119,12 @@ void GameScreen::wxTile::rightClick(wxMouseEvent& event)
 	if (this->state == State::closed) {
 		// Flag a closed tile
 		this->state = State::flag;
+		this->gameScreen->currentFlags += 1;
 	}
 	else if (this->state == State::flag) {
 		// Unflag a flagged tile
 		this->state = State::closed;
+		this->gameScreen->currentFlags -= 1;
 	}
 	else {
 		return;

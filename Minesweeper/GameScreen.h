@@ -19,7 +19,7 @@ public:
 	class wxTile : public wxWindow {
 	public:
 		// wxTile constructor
-		wxTile(wxWindow* parent, int x, int y);
+		wxTile(GameScreen* gameScreen, int x, int y);
 
 		// The state of a tile
 		enum State {
@@ -41,6 +41,8 @@ public:
 		void rightClick(wxMouseEvent& event);
 
 	private:
+		GameScreen* gameScreen;
+
 		// The coordinates of this tile
 		int x, y;
 		
@@ -55,7 +57,8 @@ public:
 	wxTile*** tiles;
 
 private:
-
+	// Keep track of the amount of current flags on the grid
+	int currentFlags = 0;
 protected:
 	// Pointer to the current game that is being played
 	MinesweeperGame* gameInstance;
