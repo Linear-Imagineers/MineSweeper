@@ -78,7 +78,7 @@ void MinesweeperGame::populateNumbersGrid() {
 // Reveals to the frontend if the tile is a bomb or not, updates values in backend accordingly
 bool MinesweeperGame::revealTile(int x, int y)
 {
-	if (gameState == GameState::active && !openedGrid[y][x] && x >= 0 && x <= gridWidth && y >= 0 && y <= gridHeight) {
+	if (gameState == GameState::active && !openedGrid[y][x] && x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
 		if (grid[y][x] == -1) {
 			gameState = GameState::lost;
 			openedGrid[y][x] = true;
@@ -97,7 +97,7 @@ bool MinesweeperGame::revealTile(int x, int y)
 
 // Return number so that the front end can display it if its open.
 int MinesweeperGame::getTileNumber(int x, int y) {
-	if (openedGrid[y][x] && x >= 0 && x <= gridWidth && y >= 0 && y <= gridHeight) {
+	if (openedGrid[y][x] && x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
 		return grid[y][x];
 	}
 	else {
