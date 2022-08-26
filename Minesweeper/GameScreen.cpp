@@ -96,8 +96,24 @@ void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 	dc.DrawBitmap(wxBitmap(wxT("" + fileName), wxBITMAP_TYPE_BMP), 0, 0);
 
 	if (this->state == State::open) {
-		int num = 3; // gameInstance->getTileNumber(this->x, this->y);
-		dc.DrawText(std::to_string(num), wxPoint(5, 5));
+		// TODO replace with backend call
+		int num = 4; // gameInstance->getTileNumber(this->x, this->y);
+
+		// TODO replace entire text drawing with custom (partially invisible) images of digits
+
+		// Set font for displaying text
+		wxFont font = wxFont().Bold();
+		font.SetPointSize(16);
+		dc.SetFont(font);
+
+		// Convert number to decimal string
+		std::string text = std::to_string(num);
+
+		// Gets the display size of the text
+		wxSize textSize = dc.GetTextExtent(text);
+
+		// Draws the text at the center of the tile
+		dc.DrawText(text, wxPoint((size - textSize.x) / 2, (size - textSize.y) / 2));
 	}
 }
 
