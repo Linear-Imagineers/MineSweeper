@@ -6,17 +6,20 @@
 GameScreen::GameScreen(wxWindow* parent) :
 	wxPanel(parent)
 {
-	// TODO backend initialization
-
-	// TODO width and height should be derived from gameInstance, but that hasn't been implemented yet
 	int gridHeight = 10;
 	int gridWidth = 10;
 
+	// TODO improve backend initialization:
+	//			get instance passed with argument
+	//			get width and height from backend
+	//			proper checks if grid generated
+	//			pass to backend when first click made (or handle automatically in backend)
 	gameInstance = new MinesweeperGame(1, false, gridWidth, gridHeight);
 
-	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
+	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
+	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
 	// Set appropriate window size
-	parent->SetSize(gridWidth * Tile::size + 17, gridHeight * Tile::size + 40);
+	parent->SetSize(gridWidth * (Tile::size + 1) - 1 + 17, gridHeight * (Tile::size + 1) - 1 + 40);
 
 	// A wxGridSizer will allign all the tiles in a grid formation
 	wxGridSizer* sizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
@@ -44,10 +47,9 @@ GameScreen::GameScreen(wxWindow* parent) :
 	this->SetSizerAndFit(sizer);
 
 	// Bind the resize event
-	// TODO figure out why this only works well after adding all tiles
 	Bind(wxEVT_SIZE, &GameScreen::resize, this);
 
-	// TODO Draw settings button
+	// TODO Draw settings button + rest of screen (pause, reset etc)
 }
 
 void GameScreen::resize(wxSizeEvent& event) {
