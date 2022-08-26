@@ -39,7 +39,8 @@ bool MyApp::OnInit()
 }
 
 MainWindow::MainWindow()
-    : wxFrame(NULL, wxID_ANY, "Hello World")
+    // Disallow frame resizing
+    : wxFrame(NULL, wxID_ANY, "Hello World", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE & ~wxRESIZE_BORDER)
 {
     Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
 
