@@ -42,6 +42,7 @@ public:
 
 	private:
 		GameScreen* gameScreen;
+		MinesweeperGame* gameInstance;
 
 		// The coordinates of this tile
 		int x, y;

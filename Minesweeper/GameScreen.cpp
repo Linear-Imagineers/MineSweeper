@@ -61,6 +61,7 @@ GameScreen::Tile::Tile(GameScreen* gameScreen, int x, int y) :
 {
 	// Initialize variables
 	this->gameScreen = gameScreen;
+	this->gameInstance = gameScreen->gameInstance;
 	this->x = x;
 	this->y = y;
 	this->state = State::closed;
@@ -96,8 +97,7 @@ void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 	dc.DrawBitmap(wxBitmap(wxT("" + fileName), wxBITMAP_TYPE_BMP), 0, 0);
 
 	if (this->state == State::open) {
-		// TODO replace with backend call
-		int num = 4; // gameInstance->getTileNumber(this->x, this->y);
+		int num = gameInstance->getTileNumber(this->x, this->y);
 
 		// TODO replace entire text drawing with custom (partially invisible) images of digits
 
@@ -124,7 +124,21 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 		return;
 	}
 
-	// TODO contact backend and handle response appropriately
+	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
+
+	// If the game is not active anymore
+	if (gameStateChanged) {
+		MinesweeperGame::GameState gameState = gameInstance->getGameState();
+		// Show a simple popup
+		if (gameState == MinesweeperGame::GameState::won) {
+			wxMessageBox("nice");
+		}
+		else {
+			wxMessageBox("fuck you");
+		}
+
+		// TODO reveal all tiles
+	}
 
 	this->state = State::open;
 
