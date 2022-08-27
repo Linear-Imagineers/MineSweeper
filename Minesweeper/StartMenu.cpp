@@ -1,19 +1,50 @@
 #include "StartMenu.h"
-/* temporary commented out since otherwise it did not run for me
+#include "GameScreen.h"
+#include "SettingsMenu.h"
+#include <wx/msgdlg.h>
+#include <iostream>
+
+enum {
+    StartGameID = 3,
+    SettingsID = 4
+};
+
+// temporary commented out since otherwise it did not run for me
 StartMenu::StartMenu(wxWindow* parent) :
     wxPanel(parent)
 {
-    //Draw all the controlls of the starting menu
-        //Adjust settings for new game
-        //Create new game
-            //switch to new scene (gamescreen)
+    // Binds the click event with id PanelId to the startGame function
+    Bind(wxEVT_BUTTON, &StartMenu::OnStartGame, this, StartGameID);
+    Bind(wxEVT_BUTTON, &StartMenu::OnSettings, this, SettingsID);
+    
+
+    // wxPosition object
+    wxPoint StartGameButtonPos = wxPoint(100, 50);
+    wxSize StartGameButtonSize = wxSize(200, 50);
+    wxString StartGameButtonText = "Start Game";
+
+    // Instantiate start game button
+    wxButton* StartGameButton = new wxButton(this, StartGameID, StartGameButtonText, StartGameButtonPos, StartGameButtonSize);
+
+
+    wxPoint SettingsButtonPos = wxPoint(100, 150);
+    wxSize SettingsButtonSize = wxSize(200, 50);
+    wxString SettingsButtonText = "Settings";
+
+    // Instantiate start game button
+    wxButton* SettingsButton = new wxButton(this, SettingsID, SettingsButtonText, SettingsButtonPos, SettingsButtonSize);
+    
 }
 
-//MinesweeperGame StartMenu::startGame()
-//{
-    // Create an instance backend
+void StartMenu::OnStartGame(wxCommandEvent& event)
+{
+    //MinesweeperGame* NewGame = new MinesweeperGame(1, true, 10, 10);
+    this->Hide();
+    GameScreen* gameScreen = new GameScreen(GetParent());
+}
 
-    // Switch the panel to game screen
-    // pass instance of backend to game screen
-//}
-*/
+void StartMenu::OnSettings(wxCommandEvent& event) {
+    this->Hide();
+    SettingsMenu* settingsScreen = new SettingsMenu(GetParent());
+}
+
