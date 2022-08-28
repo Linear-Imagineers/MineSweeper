@@ -39,12 +39,14 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 	int** bombs = new int* [bombsAmount];
 	for (int i = 0; i < bombsAmount; i++) {
 		bombs[i] = new int[2];
-		bombs[i][0] = { i };
-		bombs[i][1] = { 2 };
+		// Example bombs are at (i, 2), the third row
+		bombs[i][0] = i;
+		bombs[i][1] = 2;
 	}
 
 	populateNumbersGrid(bombs);
 
+	// The game is on
 	gameState = GameState::active;
 }
 
@@ -62,6 +64,7 @@ void MinesweeperGame::populateNumbersGrid(int** bombs) {
 		// Put the bomb on the grid
 		grid[bombY][bombX] = -1;
 		
+		// Loop over a 3x3 grid surrounding the bomb tile
 		for (int dy = -1; dy < 2; dy++) {
 			for (int dx = -1; dx < 2; dx++) {
 				int x = bombX + dx;
@@ -74,11 +77,7 @@ void MinesweeperGame::populateNumbersGrid(int** bombs) {
 				}
 			}
 		}
-		
 	}
-
-	// The game is on
-	gameState = GameState::active;
 }
 
 // Reveals to the frontend if the tile is a bomb or not, updates values in backend accordingly
@@ -101,7 +100,7 @@ bool MinesweeperGame::revealTile(int x, int y)
 
 	// Throw an exception if this tile is already opened
 	if (openedGrid[y][x]) {
-		throw std::logic_error("Attempt to reveal already-reveaveled tile at (" + std::to_string(x) + ", " + std::to_string(y) + ")");
+		throw std::logic_error("Attempt to reveal already-reveaveled tile at " + formatCoords(x, y));
 	}
 
 	// Open tile and decrement the closed tiles counter
@@ -114,7 +113,7 @@ bool MinesweeperGame::revealTile(int x, int y)
 		
 		return true;
 	}
-	// Check if all remaining tiles are bombs, if so game is won
+	// Check if all remaining tiles are bombs, if so, the game is won
 	else if (closedTilesCount == bombsAmount) {
 		gameState = GameState::won;
 		return true;

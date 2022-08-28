@@ -49,9 +49,10 @@ private:
 	int** grid;
 
 	// Points to the array where boolean value of open or closed is stored for each tile of the grid
-	//  Only to be modified using revealTile
+	//  closedTilesCount should be kept in sync with this grid 
+	//  (closedTilesCount should contain the amount of 'false' values in the 2d array at all times)
 	bool** openedGrid;
-	// Keeps track of the current amount of closed tiles
+	// Keeps track of the current amount of closed tiles, used for checking if all non-bomb tiles have been opened
 	int closedTilesCount;
 
 	/* Functions for populating the grid */
@@ -69,5 +70,6 @@ private:
 	void assertValidGridCoords(int x, int y);
 
 	// Returns the given coordinates formatted as '(x, y)'
+	// used in creating exception messages
 	std::string formatCoords(int x, int y);
 };

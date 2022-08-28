@@ -31,6 +31,9 @@ enum
 
 wxIMPLEMENT_APP(MyApp);
 
+// TODO improve unhandled exception handling:
+//   currently crashes the program, without showing exception message
+
 bool MyApp::OnInit()
 {
     MainWindow* frame = new MainWindow();

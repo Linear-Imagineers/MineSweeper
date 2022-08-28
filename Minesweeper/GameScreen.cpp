@@ -10,11 +10,9 @@ GameScreen::GameScreen(wxWindow* parent) :
 	int gridWidth = 10;
 
 	// TODO improve backend initialization:
-	//			get instance passed with argument
+	//			get backend instance passed with argument
 	//			get width and height from backend
-	//			proper checks if grid generated
-	//			pass to backend when first click made (or handle automatically in backend)
-	gameInstance = new MinesweeperGame(1, false, gridWidth, gridHeight);
+	gameInstance = new MinesweeperGame(2, false, gridWidth, gridHeight);
 
 	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
 	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
@@ -75,6 +73,8 @@ void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 	// Create wxPaintDC instance, required for painting
 	wxPaintDC dc(this);
 
+	// TODO load bitmaps much earlier, store in State enum if possible
+
 	// Get file name of bitmap resource associated with the current state
 	std::string fileName;
 	switch (this->state) {
@@ -92,7 +92,6 @@ void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 			break;
 	}
 
-	// TODO load bitmaps much earlier, store in State enum if possible
 	// Draw the bitmap
 	dc.DrawBitmap(wxBitmap(wxT("" + fileName), wxBITMAP_TYPE_BMP), 0, 0);
 
@@ -140,7 +139,10 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 		// TODO reveal all tiles
 	}
 
+	// TODO should be State::bomb instead if the gamestate changed to 'lost'
 	this->state = State::open;
+
+	// TODO if tile has 0 surrounding, reveal all tiles around this tile
 
 	// Update the displayed (bitmap) state
 	this->Refresh();
