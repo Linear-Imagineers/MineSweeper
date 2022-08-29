@@ -130,10 +130,10 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 		MinesweeperGame::GameState gameState = gameInstance->getGameState();
 		// Show a simple popup
 		if (gameState == MinesweeperGame::GameState::won) {
-			wxMessageBox("nice");
+			wxMessageBox("you did it");
 		}
 		else {
-			wxMessageBox("fuck you");
+			wxMessageBox("no don't click those, they explode");
 		}
 
 		// TODO reveal all tiles
