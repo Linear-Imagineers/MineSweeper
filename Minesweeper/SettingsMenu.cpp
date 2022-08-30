@@ -15,6 +15,9 @@ SettingsMenu::SettingsMenu(wxWindow* parent) : wxPanel(parent) {
     wxSize ExitButtonSize = wxSize(200, 50);
     wxString ExitButtonText = "Exit";
 
+    // TO DO
+    // Make it so that the exit button returns to the last visited screen, instead of going to the start menu by default
+
     // Instantiate exit button
     wxButton* ExitButton = new wxButton(this, wxID_ANY, ExitButtonText, wxDefaultPosition, ExitButtonSize);
     // Binding the exit button to the corresponding event handler
