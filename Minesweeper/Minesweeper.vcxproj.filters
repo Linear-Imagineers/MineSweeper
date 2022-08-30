@@ -72,6 +72,12 @@
     <ClInclude Include="MinesweeperGame.h">
       <Filter>Header Files\Backend</Filter>
     </ClInclude>
+    <ClInclude Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minesweeper.rc">
@@ -116,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="MinesweeperGame.cpp">
       <Filter>Source Files\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files\Frontend</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

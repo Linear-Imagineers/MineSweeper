@@ -2,6 +2,7 @@
 #include <wx/msgdlg.h>
 #include <wx/panel.h>
 #include <wx/wx.h>
+#include "MainWindow.h"
 
 GameScreen::GameScreen(wxWindow* parent) :
 	wxPanel(parent)
