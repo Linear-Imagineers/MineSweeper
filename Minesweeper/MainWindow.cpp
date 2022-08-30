@@ -18,6 +18,9 @@ public:
 
 wxIMPLEMENT_APP(MyApp);
 
+// TODO improve unhandled exception handling:
+//   currently crashes the program, without showing exception message
+
 bool MyApp::OnInit()
 {
     MainWindow* frame = new MainWindow();
@@ -27,7 +30,8 @@ bool MyApp::OnInit()
 
 
 MainWindow::MainWindow()
-    : wxFrame(NULL, wxID_ANY, "MineSweeper")
+    // Disallow frame resizing
+    : wxFrame(NULL, wxID_ANY, "MineSweeper", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE & ~wxRESIZE_BORDER)
 {
     // Sizer allows for resizing of the frame, controlling which panel can be shown and organization of the buttons
     sizer = new wxBoxSizer(wxVERTICAL);
