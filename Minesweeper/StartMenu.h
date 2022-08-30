@@ -10,8 +10,10 @@
 
 class StartMenu : public wxPanel {
 public:
-	StartMenu(wxWindow* parent);// , SettingsMenu* settings);
+	StartMenu(wxWindow* parent);
+
 private:
+	// Event handlers
 	void OnStartGame(wxCommandEvent& event);
 	void OnSettings(wxCommandEvent& event);
 };

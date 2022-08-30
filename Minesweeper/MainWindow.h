@@ -3,20 +3,39 @@
 #pragma once
 #include <wx/wxprec.h>
 
+#include "StartMenu.h"
+#include "PauseMenu.h"
+#include "SettingsMenu.h"
+#include "GameScreen.h"
+#include <wx/sizer.h>
+
 class MainWindow : public wxFrame
 {
 public:
-    wxBoxSizer* sizer;
-
-    StartMenu* startMenu;
-    PauseMenu* pauseMenu;
-    SettingsMenu* settingsMenu;
-
+    // Enum for swithcing between panels
+    enum Panels {
+        Start = 10,
+        Pause = 11,
+        Settings = 12,
+        Game = 13
+    };
     MainWindow();
+    // Function for switching between different panels
+    void ShowPanel(Panels panel);
 
 private:
-    void OnExit(wxCommandEvent& event);
+    // Main sizer of the frame
+    wxBoxSizer* sizer;
+    
+    // All the panels of the aplication
+    PauseMenu* pauseMenu;
+    SettingsMenu* settingsMenu;
+    StartMenu* startMenu;
+    GameScreen* gameScreen;
+
+    // Event handlers
     void OnKeyDown(wxKeyEvent& event);
+    void OnExit(wxCommandEvent& event);
 };
 
 #endif

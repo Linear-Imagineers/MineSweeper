@@ -145,7 +145,6 @@
   <ItemGroup>
     <ClInclude Include="GameOverScreen.h" />
     <ClInclude Include="GameScreen.h" />
-    <ClInclude Include="PanelManager.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="MinesweeperGame.h" />
@@ -161,7 +160,6 @@
     <ClCompile Include="MinesweeperGame.cpp" />
     <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
-    <ClCompile Include="PanelManager.cpp" />
     <ClCompile Include="StartMenu.cpp" />
   </ItemGroup>
   <ItemGroup>

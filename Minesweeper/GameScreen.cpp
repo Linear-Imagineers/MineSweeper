@@ -2,6 +2,7 @@
 #include <wx/msgdlg.h>
 #include <wx/panel.h>
 #include <wx/wx.h>
+#include "MainWindow.h"
 
 GameScreen::GameScreen(wxWindow* parent) :
 	wxPanel(parent)
@@ -46,7 +47,6 @@ GameScreen::GameScreen(wxWindow* parent) :
 	// Bind the resize event
 	// TODO figure out why this only works well after adding all tiles
 	Bind(wxEVT_SIZE, &GameScreen::resize, this);
-
 	// TODO Draw settings button
 }
 

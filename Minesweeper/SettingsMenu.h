@@ -8,7 +8,7 @@ class SettingsMenu : public wxPanel
 {
 public:
     SettingsMenu(wxWindow* parent);
-
+    void OnExit(wxCommandEvent& event);
 };
 
 #endif

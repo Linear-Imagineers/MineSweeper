@@ -3,45 +3,50 @@
 #include "SettingsMenu.h"
 #include <wx/msgdlg.h>
 #include <iostream>
-
-enum {
-    StartGameID = 3,
-    SettingsID = 4
-};
+#include "MainWindow.h"
 
 StartMenu::StartMenu(wxWindow* parent) : wxPanel(parent)
-{
-    // Binds the click event with id PanelId to the startGame function
-    Bind(wxEVT_BUTTON, &StartMenu::OnStartGame, this, StartGameID);
-    Bind(wxEVT_BUTTON, &StartMenu::OnSettings, this, SettingsID);
-    
-    // wxPosition object
-    wxPoint StartGameButtonPos = wxPoint(100, 50);
+{   
+    // Sets the min default size for the panel, such that it matches its parent
+    this->SetMinSize(parent->GetSize());
+
+    // A sizer such that all the buttons are easily aligned in the vertical direction
+    wxBoxSizer* ButtonSizer = new wxBoxSizer(wxVERTICAL);
+    this->SetSizer(ButtonSizer);
+
+
+    // instantiating all properties for the startbutton
     wxSize StartGameButtonSize = wxSize(200, 50);
     wxString StartGameButtonText = "Start Game";
 
     // Instantiate start game button
-    wxButton* StartGameButton = new wxButton(this, StartGameID, StartGameButtonText, StartGameButtonPos, StartGameButtonSize);
+    wxButton* StartGameButton = new wxButton(this, wxID_ANY, StartGameButtonText, wxDefaultPosition, StartGameButtonSize);
+    // Binding the startbutton to the corresponding event handler
+    StartGameButton->Bind(wxEVT_BUTTON, &StartMenu::OnStartGame, this);
 
-
-    wxPoint SettingsButtonPos = wxPoint(100, 150);
+    // instantiating all properties for the settingsbutton
     wxSize SettingsButtonSize = wxSize(200, 50);
     wxString SettingsButtonText = "Settings";
 
-    // Instantiate start game button
-    wxButton* SettingsButton = new wxButton(this, SettingsID, SettingsButtonText, SettingsButtonPos, SettingsButtonSize);
-    
+    // Instantiate settingsbutton
+    wxButton* SettingsButton = new wxButton(this, wxID_ANY, SettingsButtonText, wxDefaultPosition, SettingsButtonSize);
+    // Binding the settingsbutton to the corresponding event handler
+    SettingsButton->Bind(wxEVT_BUTTON, &StartMenu::OnSettings, this);
+
+    // Adding the buttons to the sizer
+    ButtonSizer->Add(StartGameButton, 0, wxALIGN_CENTER | wxTOP, 30);
+    ButtonSizer->Add(SettingsButton, 0, wxALIGN_CENTER | wxTOP, 30);
 }
 
+// Event handler for starting a game
 void StartMenu::OnStartGame(wxCommandEvent& event)
 {
     //MinesweeperGame* NewGame = new MinesweeperGame(1, true, 10, 10);
-    this->Hide();
-    GameScreen* gameScreen = new GameScreen(GetParent());
+    ((MainWindow*)GetParent())->ShowPanel(MainWindow::Panels::Game);
 }
 
+// Event handler for going to the settings menu
 void StartMenu::OnSettings(wxCommandEvent& event) {
-    this->Hide();
-    SettingsMenu* settingsScreen = new SettingsMenu(GetParent());
+    ((MainWindow*)GetParent())->ShowPanel(MainWindow::Panels::Settings);
 }
 
