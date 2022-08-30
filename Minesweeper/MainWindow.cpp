@@ -9,21 +9,15 @@
 //Other includes
 #include "GameScreen.h"
 #include "StartMenu.h"
+#include "PauseMenu.h"
+#include "SettingsMenu.h"
+//#include "PanelManager.h"
+#include "MainWindow.h"
 
 class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
-};
-
-class MainWindow : public wxFrame
-{
-public:
-    MainWindow();
-
-private:
-    void OnExit(wxCommandEvent& event);
-    void OnKeyDown(wxKeyEvent& event);
 };
 
 enum
@@ -40,18 +34,29 @@ bool MyApp::OnInit()
     return true; 
 }
 
+
 MainWindow::MainWindow()
     : wxFrame(NULL, wxID_ANY, "Hello World")
 {
-    Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
-    Bind(wxEVT_CHAR_HOOK, &MainWindow::OnKeyDown, this);
+    sizer = new wxBoxSizer(wxVERTICAL);
+    this->SetSizer(sizer);
 
-    StartMenu* startMenu = new StartMenu(this);
-    startMenu->SetFocus();
-    //right now it jumps straight into the game screen
-    //GameScreen * gameScreen = new GameScreen(this);
-    //gameScreen->SetFocus();
+    startMenu = new StartMenu(this);
+    /*pauseMenu = new PauseMenu(this);
+    pauseMenu->Hide();
+    settingsMenu = new SettingsMenu(this);
+    settingsMenu->Hide();*/
+
+    sizer->Add(startMenu);
+    /*sizer->Add(pauseMenu);
+    sizer->Add(settingsMenu);*/
+    sizer->Layout();
+    //PanelManager* manager = new PanelManager(this);
+
+    Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
+    Bind(wxEVT_CHAR_HOOK, &MainWindow::OnKeyDown, this, wxID_ANY);
 }
+
 
 void MainWindow::OnExit(wxCommandEvent& event)
 {

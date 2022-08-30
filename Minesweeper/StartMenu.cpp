@@ -9,15 +9,12 @@ enum {
     SettingsID = 4
 };
 
-// temporary commented out since otherwise it did not run for me
-StartMenu::StartMenu(wxWindow* parent) :
-    wxPanel(parent)
+StartMenu::StartMenu(wxWindow* parent) : wxPanel(parent)
 {
     // Binds the click event with id PanelId to the startGame function
     Bind(wxEVT_BUTTON, &StartMenu::OnStartGame, this, StartGameID);
     Bind(wxEVT_BUTTON, &StartMenu::OnSettings, this, SettingsID);
     
-
     // wxPosition object
     wxPoint StartGameButtonPos = wxPoint(100, 50);
     wxSize StartGameButtonSize = wxSize(200, 50);

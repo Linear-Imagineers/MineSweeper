@@ -1,3 +1,5 @@
+#ifndef __HEADER_SETTINGSMENU
+#define __HEADER_SETTINGSMENU
 #pragma once
 
 #include <wx/panel.h>
@@ -9,3 +11,4 @@ public:
 
 };
 
+#endif
