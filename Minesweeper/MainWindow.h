@@ -14,10 +14,10 @@ class MainWindow : public wxFrame
 public:
     // Enum for swithcing between panels
     enum Panels {
-        Start = 10,
-        Pause = 11,
-        Settings = 12,
-        Game = 13
+        Start,
+        Pause,
+        Settings,
+        Game
     };
     MainWindow();
     // Function for switching between different panels
