@@ -49,6 +49,18 @@
     <Filter Include="Source Files\Backend">
       <UniqueIdentifier>{8b0f42ad-e957-4ea5-8c4d-829ad6c6af0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Frontend\Statistics Menu">
+      <UniqueIdentifier>{b415fea4-479e-4f85-9a0e-cd7185061917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Pause Menu">
+      <UniqueIdentifier>{1adb57c8-961e-40a8-a55c-23f120864f38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Statistics Menu">
+      <UniqueIdentifier>{bd23df18-def7-497b-8fc2-27b74b74ce63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Pause Menu">
+      <UniqueIdentifier>{44f126b0-7268-454e-ac3a-b15ffd32c3d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -75,8 +87,11 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StatisticsMenu.h">
+      <Filter>Header Files\Frontend\Statistics Menu</Filter>
+    </ClInclude>
     <ClInclude Include="PauseMenu.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Frontend\Pause Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,8 +138,11 @@
     <ClCompile Include="MinesweeperGame.cpp">
       <Filter>Source Files\Backend</Filter>
     </ClCompile>
+    <ClCompile Include="StatisticsMenu.cpp">
+      <Filter>Source Files\Frontend\Statistics Menu</Filter>
+    </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
-      <Filter>Source Files\Frontend</Filter>
+      <Filter>Source Files\Frontend\Pause Menu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

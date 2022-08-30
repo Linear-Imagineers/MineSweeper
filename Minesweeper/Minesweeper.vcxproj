@@ -151,6 +151,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="StartMenu.h" />
+    <ClInclude Include="StatisticsMenu.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="StartMenu.cpp" />
+    <ClCompile Include="StatisticsMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minesweeper.rc" />

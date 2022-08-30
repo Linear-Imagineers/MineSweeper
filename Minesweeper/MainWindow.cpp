@@ -42,11 +42,14 @@ MainWindow::MainWindow()
     startMenu = new StartMenu(this);
     pauseMenu = new PauseMenu(this);
     settingsMenu = new SettingsMenu(this);
+    statisticsMenu = new StatisticsMenu(this);
+
 
     // Adding the panels to the sizer, so that we can manage which one is viewed
     sizer->Add(startMenu);
     sizer->Add(pauseMenu);
     sizer->Add(settingsMenu);
+    sizer->Add(statisticsMenu);
     sizer->Add(gameScreen);
 
     // On startup we display the startmenu
@@ -64,6 +67,7 @@ void MainWindow::ShowPanel(Panels panel)
     sizer->Show(startMenu, panel == Start);
     sizer->Show(pauseMenu, panel == Pause);
     sizer->Show(settingsMenu, panel == Settings);
+    sizer->Show(statisticsMenu, panel == Statistics);
     sizer->Show(gameScreen, panel == Game);
     // Forces new layout on children objects
     sizer->Layout();

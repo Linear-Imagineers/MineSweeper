@@ -6,6 +6,7 @@
 #include "StartMenu.h"
 #include "PauseMenu.h"
 #include "SettingsMenu.h"
+#include "StatisticsMenu.h"
 #include "GameScreen.h"
 #include <wx/sizer.h>
 
@@ -17,6 +18,7 @@ public:
         Start,
         Pause,
         Settings,
+        Statistics,
         Game
     };
     MainWindow();
@@ -31,6 +33,7 @@ private:
     PauseMenu* pauseMenu;
     SettingsMenu* settingsMenu;
     StartMenu* startMenu;
+    StatisticsMenu* statisticsMenu;
     GameScreen* gameScreen;
 
     // Event handlers
