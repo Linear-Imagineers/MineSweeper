@@ -31,6 +31,9 @@ enum
 
 wxIMPLEMENT_APP(MyApp);
 
+// TODO improve unhandled exception handling:
+//   currently crashes the program, without showing exception message
+
 bool MyApp::OnInit()
 {
     MainWindow* frame = new MainWindow();
@@ -39,7 +42,8 @@ bool MyApp::OnInit()
 }
 
 MainWindow::MainWindow()
-    : wxFrame(NULL, wxID_ANY, "Hello World")
+    // Disallow frame resizing
+    : wxFrame(NULL, wxID_ANY, "Hello World", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE & ~wxRESIZE_BORDER)
 {
     Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
 

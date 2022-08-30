@@ -6,32 +6,33 @@
 GameScreen::GameScreen(wxWindow* parent) :
 	wxPanel(parent)
 {
-	// TODO backend initialization
-
-	// TODO width and height should be derived from gameInstance, but that hasn't been implemented yet
 	int gridHeight = 10;
 	int gridWidth = 10;
 
-	gameInstance = new MinesweeperGame(1, false, gridWidth, gridHeight);
+	// TODO improve backend initialization:
+	//			get backend instance passed with argument
+	//			get width and height from backend
+	gameInstance = new MinesweeperGame(2, false, gridWidth, gridHeight);
 
-	// TODO better solution for this (automatically set size to minimal fit), also probably disallow user resizing
+	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
+	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
 	// Set appropriate window size
-	parent->SetSize(gridWidth * wxTile::size + 17, gridHeight * wxTile::size + 40);
+	parent->SetSize(gridWidth * (Tile::size + 1) - 1 + 17, gridHeight * (Tile::size + 1) - 1 + 40);
 
 	// A wxGridSizer will allign all the tiles in a grid formation
 	wxGridSizer* sizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
 
 	// Initialize grid
-	tiles = new wxTile ** [gridHeight];
+	tiles = new Tile ** [gridHeight];
 	for (int y = 0; y < gridHeight; y++) {
-		tiles[y] = new wxTile*[gridWidth];
+		tiles[y] = new Tile*[gridWidth];
 	}
 
 	// Draw the grid
 	for (int x = 0; x < gridWidth; x++) {
 		for (int y = 0; y < gridHeight; y++) {
 			// Instantiate new wxTile object
-			tiles[y][x] = new wxTile(this, y, x);
+			tiles[y][x] = new Tile(this, y, x);
 
 			// Add wxTile object to the grid sizer
 			// The order in which items are added to the sizer matters:
@@ -44,21 +45,21 @@ GameScreen::GameScreen(wxWindow* parent) :
 	this->SetSizerAndFit(sizer);
 
 	// Bind the resize event
-	// TODO figure out why this only works well after adding all tiles
 	Bind(wxEVT_SIZE, &GameScreen::resize, this);
 
-	// TODO Draw settings button
+	// TODO Draw settings button + rest of screen (pause, reset etc)
 }
 
 void GameScreen::resize(wxSizeEvent& event) {
 	Refresh();
 }
 
-GameScreen::wxTile::wxTile(GameScreen* gameScreen, int x, int y) : 
+GameScreen::Tile::Tile(GameScreen* gameScreen, int x, int y) : 
 	wxWindow(gameScreen, wxID_ANY)
 {
 	// Initialize variables
 	this->gameScreen = gameScreen;
+	this->gameInstance = gameScreen->gameInstance;
 	this->x = x;
 	this->y = y;
 	this->state = State::closed;
@@ -67,10 +68,12 @@ GameScreen::wxTile::wxTile(GameScreen* gameScreen, int x, int y) :
 	SetMinSize(wxSize(size, size));
 }
 
-void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
+void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 {
 	// Create wxPaintDC instance, required for painting
 	wxPaintDC dc(this);
+
+	// TODO load bitmaps much earlier, store in State enum if possible
 
 	// Get file name of bitmap resource associated with the current state
 	std::string fileName;
@@ -89,32 +92,63 @@ void GameScreen::wxTile::paintEvent(wxPaintEvent& evt)
 			break;
 	}
 
-	// TODO load bitmaps much earlier, store in State enum if possible
 	// Draw the bitmap
 	dc.DrawBitmap(wxBitmap(wxT("" + fileName), wxBITMAP_TYPE_BMP), 0, 0);
 
 	if (this->state == State::open) {
-		int num = 3; // gameInstance->getTileNumber(this->x, this->y);
-		dc.DrawText(std::to_string(num), wxPoint(5, 5));
+		int num = gameInstance->getTileNumber(this->x, this->y);
+
+		// TODO replace entire text drawing with custom (partially invisible) images of digits
+
+		// Set font for displaying text
+		wxFont font = wxFont().Bold();
+		font.SetPointSize(16);
+		dc.SetFont(font);
+
+		// Convert number to decimal string
+		std::string text = std::to_string(num);
+
+		// Gets the display size of the text
+		wxSize textSize = dc.GetTextExtent(text);
+
+		// Draws the text at the center of the tile
+		dc.DrawText(text, wxPoint((size - textSize.x) / 2, (size - textSize.y) / 2));
 	}
 }
 
-void GameScreen::wxTile::leftClick(wxMouseEvent& event)
+void GameScreen::Tile::leftClick(wxMouseEvent& event)
 {
 	// Only closed tiles can be opened
 	if (this->state != State::closed) {
 		return;
 	}
 
-	// TODO contact backend and handle response appropriately
+	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
 
+	// If the game is not active anymore
+	if (gameStateChanged) {
+		MinesweeperGame::GameState gameState = gameInstance->getGameState();
+		// Show a simple popup
+		if (gameState == MinesweeperGame::GameState::won) {
+			wxMessageBox("you did it");
+		}
+		else {
+			wxMessageBox("no don't click those, they explode");
+		}
+
+		// TODO reveal all tiles
+	}
+
+	// TODO should be State::bomb instead if the gamestate changed to 'lost'
 	this->state = State::open;
+
+	// TODO if tile has 0 surrounding, reveal all tiles around this tile
 
 	// Update the displayed (bitmap) state
 	this->Refresh();
 }
 
-void GameScreen::wxTile::rightClick(wxMouseEvent& event)
+void GameScreen::Tile::rightClick(wxMouseEvent& event)
 {
 	if (this->state == State::closed) {
 		// Flag a closed tile
@@ -135,13 +169,13 @@ void GameScreen::wxTile::rightClick(wxMouseEvent& event)
 }
 
 // Event table for wxTile, defines which methods are called for which events
-wxBEGIN_EVENT_TABLE(GameScreen::wxTile, wxPanel)
+wxBEGIN_EVENT_TABLE(GameScreen::Tile, wxPanel)
 
 	// Bind left and right click events
-	EVT_LEFT_DOWN(wxTile::leftClick)
-	EVT_RIGHT_DOWN(wxTile::rightClick)
+	EVT_LEFT_DOWN(Tile::leftClick)
+	EVT_RIGHT_DOWN(Tile::rightClick)
 
 	// Bind paint event
-	EVT_PAINT(wxTile::paintEvent)
+	EVT_PAINT(Tile::paintEvent)
 
 wxEND_EVENT_TABLE()
