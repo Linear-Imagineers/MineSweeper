@@ -170,21 +170,21 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 
 void GameScreen::Tile::revealNeighbours(int x, int y) {
 	// go through neighbourhood
-	for (int deltax = -1; deltax < 2; deltax++) {
-		for (int deltay = -1; deltay < 2; deltay++) {
+	for (int dx = -1; dx < 2; dx++) {
+		for (int dy = -1; dy < 2; dy++) {
 			// if it is out of range for the grid skip all of it
-			if (x + deltax < 10 && x + deltax >= 0 && y + deltay < 10 && y + deltay >= 0) {
+			if (x + dx < 10 && x + dx >= 0 && y + dy < 10 && y + dy >= 0) {
 				// if it is not closed ignore opening this tile.
-				if (tiles[y + deltay][x + deltax]->state == State::closed) {
+				if (tiles[y + dy][x + dx]->state == State::closed) {
 					// if it is not a win or lose condition (so not the last tile) 
-					if (!this->gameInstance->revealTile(x + deltax, y + deltay)) {
+					if (!this->gameInstance->revealTile(x + dx, y + dy)) {
 						// set the tile to open after revealing it from the backend and draw it with Refresh
-						tiles[y + deltay][x + deltax]->state = State::open;
-						tiles[y + deltay][x + deltax]->Refresh();
+						tiles[y + dy][x + dx]->state = State::open;
+						tiles[y + dy][x + dx]->Refresh();
 						// check if it is also a zero and recursively call revealNeighbours
-						int num = this->gameInstance->getTileNumber(x + deltax, y + deltay);
+						int num = this->gameInstance->getTileNumber(x + dx, y + dy);
 						if (num == 0) {
-							revealNeighbours(x + deltax, y + deltay);
+							revealNeighbours(x + dx, y + dy);
 						}
 					}
 					else {
