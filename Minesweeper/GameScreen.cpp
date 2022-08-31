@@ -13,7 +13,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 	// TODO improve backend initialization:
 	//			get backend instance passed with argument
 	//			get width and height from backend
-	gameInstance = new MinesweeperGame(2, false, gridWidth, gridHeight);
+	gameInstance = new MinesweeperGame(9, false, gridWidth, gridHeight);
 
 	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
 	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
@@ -169,19 +169,26 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 }
 
 void GameScreen::Tile::revealNeighbours(int x, int y) {
+	// go through neighbourhood
 	for (int deltax = -1; deltax < 2; deltax++) {
 		for (int deltay = -1; deltay < 2; deltay++) {
+			// if it is out of range for the grid skip all of it
 			if (x + deltax < 10 && x + deltax >= 0 && y + deltay < 10 && y + deltay >= 0) {
+				// if it is not closed ignore opening this tile.
 				if (tiles[y + deltay][x + deltax]->state == State::closed) {
+					// if it is not a win or lose condition (so not the last tile) 
 					if (!this->gameInstance->revealTile(x + deltax, y + deltay)) {
+						// set the tile to open after revealing it from the backend and draw it with Refresh
 						tiles[y + deltay][x + deltax]->state = State::open;
 						tiles[y + deltay][x + deltax]->Refresh();
+						// check if it is also a zero and recursively call revealNeighbours
 						int num = this->gameInstance->getTileNumber(x + deltax, y + deltay);
 						if (num == 0) {
 							revealNeighbours(x + deltax, y + deltay);
 						}
 					}
 					else {
+						// same as in left click, when gamestatechanged is active check which win condition
 						MinesweeperGame::GameState gameState = gameInstance->getGameState();
 						// Show a simple popup
 						if (gameState == MinesweeperGame::GameState::won) {
