@@ -136,38 +136,78 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 		}
 		else {
 			wxMessageBox("no don't click those, they explode");
-
-			for (int x = 0; x < 10; x++) {
-				for (int y = 0; y < 10; y++) {
-					int num = gameInstance->getTileNumber(x, y);
-					if (num == -1) {
-						tiles[y][x]->state = State::bomb;
-					}
-					else {
-						tiles[y][x]->state = State::open;
-					}
-					tiles[y][x]->Refresh();
+		}
+		// reveal all tiles
+		for (int x = 0; x < 10; x++) {
+			for (int y = 0; y < 10; y++) {
+				int num = gameInstance->getTileNumber(x, y);
+				if (num == -1) {
+					tiles[y][x]->state = State::bomb;
 				}
+				else {
+					tiles[y][x]->state = State::open;
+				}
+				tiles[y][x]->Refresh();
 			}
 		}
-
-		// TODO reveal all tiles
 	}
 	
-	// TODO should be State::bomb instead if the gamestate changed to 'lost'
+	// State::bomb if its a bomb
 	if (tileNum == -1) {
 		this->state = State::bomb;
+	}
+	// if tile has 0, reveal all tiles around this tile
+	else if (tileNum == 0) {
+		this->state = State::open;
+		this->revealNeighbours(this->x, this->y); // recursive function
 	}
 	else {
 		this->state = State::open;
 	}
-	
-	
-
-	// TODO if tile has 0 surrounding, reveal all tiles around this tile
-
 	// Update the displayed (bitmap) state
 	this->Refresh();
+}
+
+void GameScreen::Tile::revealNeighbours(int x, int y) {
+	for (int deltax = -1; deltax < 2; deltax++) {
+		for (int deltay = -1; deltay < 2; deltay++) {
+			if (x + deltax < 10 && x + deltax >= 0 && y + deltay < 10 && y + deltay >= 0) {
+				if (tiles[y + deltay][x + deltax]->state == State::closed) {
+					if (!this->gameInstance->revealTile(x + deltax, y + deltay)) {
+						tiles[y + deltay][x + deltax]->state = State::open;
+						tiles[y + deltay][x + deltax]->Refresh();
+						int num = this->gameInstance->getTileNumber(x + deltax, y + deltay);
+						if (num == 0) {
+							revealNeighbours(x + deltax, y + deltay);
+						}
+					}
+					else {
+						MinesweeperGame::GameState gameState = gameInstance->getGameState();
+						// Show a simple popup
+						if (gameState == MinesweeperGame::GameState::won) {
+							wxMessageBox("you did it");
+						}
+						else {
+							wxMessageBox("no don't click those, they explode");
+						}
+						// reveal all tiles
+						for (int x = 0; x < 10; x++) {
+							for (int y = 0; y < 10; y++) {
+								int num = gameInstance->getTileNumber(x, y);
+								if (num == -1) {
+									tiles[y][x]->state = State::bomb;
+								}
+								else {
+									tiles[y][x]->state = State::open;
+								}
+								tiles[y][x]->Refresh();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void GameScreen::Tile::rightClick(wxMouseEvent& event)

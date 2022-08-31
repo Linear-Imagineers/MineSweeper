@@ -20,6 +20,9 @@ public:
 	public:
 		// wxTile constructor
 		Tile(GameScreen* gameScreen, Tile*** tiles, int x, int y);
+		
+		// recursive function
+		void revealNeighbours(int x, int y);
 
 		// The state of a tile
 		enum State {
