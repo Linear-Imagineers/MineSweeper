@@ -33,7 +33,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 	for (int x = 0; x < gridWidth; x++) {
 		for (int y = 0; y < gridHeight; y++) {
 			// Instantiate new wxTile object
-			tiles[y][x] = new Tile(this, y, x);
+			tiles[y][x] = new Tile(this, tiles, x, y);
 
 			// Add wxTile object to the grid sizer
 			// The order in which items are added to the sizer matters:
@@ -55,10 +55,11 @@ void GameScreen::resize(wxSizeEvent& event) {
 	Refresh();
 }
 
-GameScreen::Tile::Tile(GameScreen* gameScreen, int x, int y) : 
+GameScreen::Tile::Tile(GameScreen* gameScreen, Tile*** tiles, int x, int y) : 
 	wxWindow(gameScreen, wxID_ANY)
 {
 	// Initialize variables
+	this->tiles = tiles;
 	this->gameScreen = gameScreen;
 	this->gameInstance = gameScreen->gameInstance;
 	this->x = x;
@@ -125,7 +126,7 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 	}
 
 	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
-
+	int tileNum = gameInstance->getTileNumber(this->x, this->y);
 	// If the game is not active anymore
 	if (gameStateChanged) {
 		MinesweeperGame::GameState gameState = gameInstance->getGameState();
@@ -135,13 +136,33 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 		}
 		else {
 			wxMessageBox("no don't click those, they explode");
+
+			for (int x = 0; x < 10; x++) {
+				for (int y = 0; y < 10; y++) {
+					int num = gameInstance->getTileNumber(x, y);
+					if (num == -1) {
+						tiles[y][x]->state = State::bomb;
+					}
+					else {
+						tiles[y][x]->state = State::open;
+					}
+					tiles[y][x]->Refresh();
+				}
+			}
 		}
 
 		// TODO reveal all tiles
 	}
-
+	
 	// TODO should be State::bomb instead if the gamestate changed to 'lost'
-	this->state = State::open;
+	if (tileNum == -1) {
+		this->state = State::bomb;
+	}
+	else {
+		this->state = State::open;
+	}
+	
+	
 
 	// TODO if tile has 0 surrounding, reveal all tiles around this tile
 

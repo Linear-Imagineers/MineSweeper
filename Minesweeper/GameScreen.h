@@ -19,7 +19,7 @@ public:
 	class Tile : public wxWindow {
 	public:
 		// wxTile constructor
-		Tile(GameScreen* gameScreen, int x, int y);
+		Tile(GameScreen* gameScreen, Tile*** tiles, int x, int y);
 
 		// The state of a tile
 		enum State {
@@ -43,6 +43,7 @@ public:
 	private:
 		GameScreen* gameScreen;
 		MinesweeperGame* gameInstance;
+		Tile*** tiles;
 
 		// The coordinates of this tile
 		int x, y;
