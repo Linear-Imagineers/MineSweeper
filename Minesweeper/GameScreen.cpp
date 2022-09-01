@@ -126,8 +126,8 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 	}
 
 	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
-	int tileNum = gameInstance->getTileNumber(this->x, this->y);
 
+	int tileNum = gameInstance->getTileNumber(this->x, this->y);
 	// State::bomb if its a bomb
 	if (tileNum == -1) {
 		this->state = State::bomb;
@@ -149,8 +149,6 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 	if (gameStateChanged) {
 		gameEnd();
 	}
-	
-
 }
 
 void GameScreen::Tile::gameEnd() {
@@ -163,9 +161,10 @@ void GameScreen::Tile::gameEnd() {
 	else {
 		wxMessageBox("no don't click those, they explode");
 	}
+
 	// reveal all tiles
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
+	for (int x = 0; x < gameInstance->getGridWidth(); x++) {
+		for (int y = 0; y < gameInstance->getGridHeight(); y++) {
 			int num = gameInstance->getTileNumber(x, y);
 			if (num == -1) {
 				tiles[y][x]->state = State::bomb;
@@ -192,15 +191,15 @@ void GameScreen::Tile::revealNeighbours(int startX, int startY) {
 					tiles[y][x]->state = State::open;
 					tiles[y][x]->Refresh();
 
-					if (!this->gameInstance->revealTile(x, y)) {
-						// check if it is also a zero and recursively call revealNeighbours
-						int num = this->gameInstance->getTileNumber(x, y);
-						if (num == 0) {
-							revealNeighbours(x, y);
-						}
-					}
-					else {
+					if (this->gameInstance->revealTile(x, y)) {
 						gameEnd();
+						return;
+					}
+
+					// check if it is also a zero and recursively call revealNeighbours
+					int num = this->gameInstance->getTileNumber(x, y);
+					if (num == 0) {
+						revealNeighbours(x, y);
 					}
 				}
 			}
