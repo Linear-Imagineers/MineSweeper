@@ -13,7 +13,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 	// TODO improve backend initialization:
 	//			get backend instance passed with argument
 	//			get width and height from backend
-	gameInstance = new MinesweeperGame(2, false, gridWidth, gridHeight);
+	gameInstance = new MinesweeperGame(9, false, gridWidth, gridHeight);
 
 	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
 	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
@@ -33,7 +33,7 @@ GameScreen::GameScreen(wxWindow* parent) :
 	for (int x = 0; x < gridWidth; x++) {
 		for (int y = 0; y < gridHeight; y++) {
 			// Instantiate new wxTile object
-			tiles[y][x] = new Tile(this, y, x);
+			tiles[y][x] = new Tile(this, x, y);
 
 			// Add wxTile object to the grid sizer
 			// The order in which items are added to the sizer matters:
@@ -59,6 +59,7 @@ GameScreen::Tile::Tile(GameScreen* gameScreen, int x, int y) :
 	wxWindow(gameScreen, wxID_ANY)
 {
 	// Initialize variables
+	this->tiles = gameScreen->tiles;
 	this->gameScreen = gameScreen;
 	this->gameInstance = gameScreen->gameInstance;
 	this->x = x;
@@ -119,34 +120,71 @@ void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 
 void GameScreen::Tile::leftClick(wxMouseEvent& event)
 {
-	// Only closed tiles can be opened
-	if (this->state != State::closed) {
-		return;
+	revealTile(this->x, this->y);
+}
+
+void GameScreen::Tile::gameEnd() {
+	// when gamestatechanged is active check which win condition
+	MinesweeperGame::GameState gameState = gameInstance->getGameState();
+	// Show a simple popup
+	if (gameState == MinesweeperGame::GameState::won) {
+		wxMessageBox("you did it");
+	}
+	else {
+		wxMessageBox("no don't click those, they explode");
 	}
 
-	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
-
-	// If the game is not active anymore
-	if (gameStateChanged) {
-		MinesweeperGame::GameState gameState = gameInstance->getGameState();
-		// Show a simple popup
-		if (gameState == MinesweeperGame::GameState::won) {
-			wxMessageBox("you did it");
+	// reveal all tiles
+	for (int x = 0; x < gameInstance->getGridWidth(); x++) {
+		for (int y = 0; y < gameInstance->getGridHeight(); y++) {
+			int num = gameInstance->getTileNumber(x, y);
+			if (num == -1) {
+				tiles[y][x]->state = State::bomb;
+			}
+			else {
+				tiles[y][x]->state = State::open;
+			}
+			tiles[y][x]->Refresh();
 		}
-		else {
-			wxMessageBox("no don't click those, they explode");
-		}
-
-		// TODO reveal all tiles
 	}
+}
 
-	// TODO should be State::bomb instead if the gamestate changed to 'lost'
-	this->state = State::open;
+void GameScreen::Tile::revealNeighbours(int startX, int startY) {
+	// go through 8 surrounding tiles and itself
+	for (int dx = -1; dx < 2; dx++) {
+		for (int dy = -1; dy < 2; dy++) {
+			int x = startX + dx;
+			int y = startY + dy;
+			revealTile(x, y);
+		}
+	}
+}
 
-	// TODO if tile has 0 surrounding, reveal all tiles around this tile
+void GameScreen::Tile::revealTile(int x, int y) {
+	// if it is out of range for the grid skip all of it
+	if (gameInstance->isValidGridCoords(x, y)) {
+		// if it is not closed ignore opening this tile.
+		if (tiles[y][x]->state == State::closed) {
+			// set the tile to open after revealing it from the backend and draw it with Refresh
+			tiles[y][x]->state = State::open;
+			tiles[y][x]->Refresh();
+			bool gameStateChanged = this->gameInstance->revealTile(x, y);
 
-	// Update the displayed (bitmap) state
-	this->Refresh();
+			// check if it is also a zero and recursively call revealNeighbours
+			int num = this->gameInstance->getTileNumber(x, y);
+			if (num == 0) {
+				revealNeighbours(x, y);
+			}
+			else if (num == -1) {
+				tiles[y][x]->state = State::bomb;
+				tiles[y][x]->Refresh();
+			}
+			if (gameStateChanged) {
+				gameEnd();
+				return;
+			}
+		}
+	}
 }
 
 void GameScreen::Tile::rightClick(wxMouseEvent& event)

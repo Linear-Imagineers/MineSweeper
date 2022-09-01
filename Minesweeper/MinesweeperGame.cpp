@@ -146,6 +146,14 @@ MinesweeperGame::GameState MinesweeperGame::getGameState() {
 	return gameState;
 }
 
+int MinesweeperGame::getGridWidth() {
+	return gridWidth;
+}
+
+int MinesweeperGame::getGridHeight() {
+	return gridHeight;
+}
+
 /* Functions for validity checks and exceptions */
 
 bool MinesweeperGame::isValidGridCoords(int x, int y)

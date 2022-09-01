@@ -43,12 +43,22 @@ public:
 	private:
 		GameScreen* gameScreen;
 		MinesweeperGame* gameInstance;
+		Tile*** tiles;
 
 		// The coordinates of this tile
 		int x, y;
 		
 		// The state of this tile
 		State state;
+
+		// End of the game when a change in gameState has been noticed, gives popup message and reveals all tiles
+		void gameEnd();
+
+		// reveals the 8 surrounding tiles next to the center zero and recursive incase its also a zero
+		void revealNeighbours(int x, int y);
+
+		// reveal tile, either open if not closed, change to bomb if bomb and check for end condition
+		void revealTile(int x, int y);
 
 		// Required for the event table in the implementation file (see https://docs.wxwidgets.org/3.2/overview_events.html)
 		wxDECLARE_EVENT_TABLE();
