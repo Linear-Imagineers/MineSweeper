@@ -19,10 +19,7 @@ public:
 	class Tile : public wxWindow {
 	public:
 		// wxTile constructor
-		Tile(GameScreen* gameScreen, Tile*** tiles, int x, int y);
-		
-		// recursive function
-		void revealNeighbours(int x, int y);
+		Tile(GameScreen* gameScreen, int x, int y);
 
 		// The state of a tile
 		enum State {
@@ -53,6 +50,12 @@ public:
 		
 		// The state of this tile
 		State state;
+
+		// End of the game when a change in gameState has been noticed, gives popup message and reveals all tiles
+		void gameEnd();
+
+		// reveals the 8 surrounding tiles next to the center zero and recursive incase its also a zero
+		void revealNeighbours(int x, int y);
 
 		// Required for the event table in the implementation file (see https://docs.wxwidgets.org/3.2/overview_events.html)
 		wxDECLARE_EVENT_TABLE();

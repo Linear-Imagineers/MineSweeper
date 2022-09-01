@@ -29,6 +29,16 @@ public:
 	// Gets the current game state
 	GameState getGameState();
 
+	// Gets the gridWidth
+	int getGridWidth();
+
+	// Gets the gridHeight
+	int getGridHeight();
+
+	/* Functions for populating the grid */
+	// Check if the given coordinates are valid (within the grid)
+	bool isValidGridCoords(int x, int y);
+
 private:
 	// The width and height of the game's grid
 	int gridWidth, gridHeight;
@@ -64,8 +74,6 @@ private:
 
 	/* Functions for validity checks and exceptions */
 
-	// Check if the given coordinates are valid (within the grid)
-	bool isValidGridCoords(int x, int y);
 	// Throw an exception if the given coordinates are invalid (outside of the grid)
 	void assertValidGridCoords(int x, int y);
 

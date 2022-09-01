@@ -38,7 +38,7 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 	// Make an array with coordinates of bombs: [[x1,y1],[x2,y2],...[xn,yn]]
 	int** bombs = new int* [bombsAmount];
 	for (int i = 0; i < bombsAmount; i++) {
-		bombs[i] = new int[bombsAmount];
+		bombs[i] = new int[2];
 		// Example bombs are at (i, 2), the third row
 		bombs[i][0] = i;
 		bombs[i][1] = 2;
@@ -144,6 +144,14 @@ int MinesweeperGame::getTileNumber(int x, int y) {
 
 MinesweeperGame::GameState MinesweeperGame::getGameState() {
 	return gameState;
+}
+
+int MinesweeperGame::getGridWidth() {
+	return gridWidth;
+}
+
+int MinesweeperGame::getGridHeight() {
+	return gridHeight;
 }
 
 /* Functions for validity checks and exceptions */
