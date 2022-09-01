@@ -127,6 +127,23 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 
 	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
 	int tileNum = gameInstance->getTileNumber(this->x, this->y);
+
+	// State::bomb if its a bomb
+	if (tileNum == -1) {
+		this->state = State::bomb;
+	}
+	// if tile has 0, reveal all tiles around this tile
+	else if (tileNum == 0) {
+		this->state = State::open;
+		this->Refresh();
+		this->revealNeighbours(this->x, this->y); // recursive function
+	}
+	else {
+		this->state = State::open;
+	}
+	// Update the displayed (bitmap) state
+	this->Refresh();
+
 	// If the game is not active anymore
 	if (gameStateChanged) {
 		MinesweeperGame::GameState gameState = gameInstance->getGameState();
@@ -152,20 +169,7 @@ void GameScreen::Tile::leftClick(wxMouseEvent& event)
 		}
 	}
 	
-	// State::bomb if its a bomb
-	if (tileNum == -1) {
-		this->state = State::bomb;
-	}
-	// if tile has 0, reveal all tiles around this tile
-	else if (tileNum == 0) {
-		this->state = State::open;
-		this->revealNeighbours(this->x, this->y); // recursive function
-	}
-	else {
-		this->state = State::open;
-	}
-	// Update the displayed (bitmap) state
-	this->Refresh();
+
 }
 
 void GameScreen::Tile::revealNeighbours(int x, int y) {
@@ -188,6 +192,8 @@ void GameScreen::Tile::revealNeighbours(int x, int y) {
 						}
 					}
 					else {
+						tiles[y + dy][x + dx]->state = State::open;
+						tiles[y + dy][x + dx]->Refresh();
 						// same as in left click, when gamestatechanged is active check which win condition
 						MinesweeperGame::GameState gameState = gameInstance->getGameState();
 						// Show a simple popup
