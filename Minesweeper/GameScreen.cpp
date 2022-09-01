@@ -120,35 +120,7 @@ void GameScreen::Tile::paintEvent(wxPaintEvent& evt)
 
 void GameScreen::Tile::leftClick(wxMouseEvent& event)
 {
-	// Only closed tiles can be opened
-	if (this->state != State::closed) {
-		return;
-	}
-
-	bool gameStateChanged = this->gameInstance->revealTile(this->x, this->y);
-
-	int tileNum = gameInstance->getTileNumber(this->x, this->y);
-	// State::bomb if its a bomb
-	if (tileNum == -1) {
-		this->state = State::bomb;
-	}
-	// if tile has 0, reveal all tiles around this tile
-	else if (tileNum == 0) {
-		this->state = State::open;
-		// additional refresh to show last tile clicked on before popup, TODO to be removed when popup is changed to different panel.
-		this->Refresh();
-		this->revealNeighbours(this->x, this->y); // recursive function
-	}
-	else {
-		this->state = State::open;
-	}
-	// Update the displayed (bitmap) state
-	this->Refresh();
-
-	// If the game is not active anymore
-	if (gameStateChanged) {
-		gameEnd();
-	}
+	revealTile(this->x, this->y);
 }
 
 void GameScreen::Tile::gameEnd() {
@@ -183,25 +155,33 @@ void GameScreen::Tile::revealNeighbours(int startX, int startY) {
 		for (int dy = -1; dy < 2; dy++) {
 			int x = startX + dx;
 			int y = startY + dy;
-			// if it is out of range for the grid skip all of it
-			if (gameInstance->isValidGridCoords(x, y)) {
-				// if it is not closed ignore opening this tile.
-				if (tiles[y][x]->state == State::closed) {
-					// set the tile to open after revealing it from the backend and draw it with Refresh
-					tiles[y][x]->state = State::open;
-					tiles[y][x]->Refresh();
+			revealTile(x, y);
+		}
+	}
+}
 
-					if (this->gameInstance->revealTile(x, y)) {
-						gameEnd();
-						return;
-					}
+void GameScreen::Tile::revealTile(int x, int y) {
+	// if it is out of range for the grid skip all of it
+	if (gameInstance->isValidGridCoords(x, y)) {
+		// if it is not closed ignore opening this tile.
+		if (tiles[y][x]->state == State::closed) {
+			// set the tile to open after revealing it from the backend and draw it with Refresh
+			tiles[y][x]->state = State::open;
+			tiles[y][x]->Refresh();
 
-					// check if it is also a zero and recursively call revealNeighbours
-					int num = this->gameInstance->getTileNumber(x, y);
-					if (num == 0) {
-						revealNeighbours(x, y);
-					}
-				}
+			if (this->gameInstance->revealTile(x, y)) {
+				gameEnd();
+				return;
+			}
+
+			// check if it is also a zero and recursively call revealNeighbours
+			int num = this->gameInstance->getTileNumber(x, y);
+			if (num == 0) {
+				revealNeighbours(x, y);
+			}
+			else if (num == -1) {
+				tiles[y][x]->state = State::bomb;
+				tiles[y][x]->Refresh();
 			}
 		}
 	}

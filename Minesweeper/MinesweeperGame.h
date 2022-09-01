@@ -35,7 +35,6 @@ public:
 	// Gets the gridHeight
 	int getGridHeight();
 
-	/* Functions for populating the grid */
 	// Check if the given coordinates are valid (within the grid)
 	bool isValidGridCoords(int x, int y);
 
