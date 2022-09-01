@@ -168,11 +168,7 @@ void GameScreen::Tile::revealTile(int x, int y) {
 			// set the tile to open after revealing it from the backend and draw it with Refresh
 			tiles[y][x]->state = State::open;
 			tiles[y][x]->Refresh();
-
-			if (this->gameInstance->revealTile(x, y)) {
-				gameEnd();
-				return;
-			}
+			bool gameStateChanged = this->gameInstance->revealTile(x, y);
 
 			// check if it is also a zero and recursively call revealNeighbours
 			int num = this->gameInstance->getTileNumber(x, y);
@@ -182,6 +178,10 @@ void GameScreen::Tile::revealTile(int x, int y) {
 			else if (num == -1) {
 				tiles[y][x]->state = State::bomb;
 				tiles[y][x]->Refresh();
+			}
+			if (gameStateChanged) {
+				gameEnd();
+				return;
 			}
 		}
 	}
