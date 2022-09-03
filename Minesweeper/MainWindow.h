@@ -17,7 +17,8 @@ public:
         Start,
         Pause,
         Settings,
-        Game
+        Game,
+        Over
     };
     MainWindow();
     // Function for switching between different panels
@@ -32,6 +33,7 @@ private:
     SettingsMenu* settingsMenu;
     StartMenu* startMenu;
     GameScreen* gameScreen;
+    GameOverScreen* gameOverScreen;
 
     // Event handlers
     void OnKeyDown(wxKeyEvent& event);

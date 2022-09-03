@@ -3,7 +3,7 @@
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/event.h>
-
+#include "GameOverScreen.h"
 #include "MinesweeperGame.h"
 
 class GameScreen : public wxPanel {

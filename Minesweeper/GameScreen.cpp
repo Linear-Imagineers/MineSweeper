@@ -132,6 +132,7 @@ void GameScreen::Tile::gameEnd() {
 	}
 	else {
 		wxMessageBox("no don't click those, they explode");
+		//((MainWindow*)GetParent())->ShowPanel(MainWindow::Panels::Over);
 	}
 
 	// reveal all tiles
