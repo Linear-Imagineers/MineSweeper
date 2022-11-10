@@ -57,6 +57,9 @@ private:
 	//   0-8 = number of bombs surrounding it
 	int** grid;
 
+	// TODO write explaination and possibly rename
+	int** coordsArray;
+
 	// Points to the array where boolean value of open or closed is stored for each tile of the grid
 	//  closedTilesCount should be kept in sync with this grid 
 	//  (closedTilesCount should contain the amount of 'false' values in the 2d array at all times)

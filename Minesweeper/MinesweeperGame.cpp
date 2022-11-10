@@ -12,10 +12,11 @@ MinesweeperGame::MinesweeperGame(int bombsAmount, bool solvable, int width, int 
 
 	gameState = GameState::initializing;
 	closedTilesCount = gridHeight * gridWidth;
-	
+
 	// Dynamic array of arrays, looks complicated but makes it flexible
 	grid = new int* [height];
 	openedGrid = new bool* [height];
+	coordsArray = new int* [closedTilesCount];
 
 	// Fill grid and openedGrid 2D arrays with default values
 	for (int y = 0; y < height; y++) {
@@ -25,6 +26,9 @@ MinesweeperGame::MinesweeperGame(int bombsAmount, bool solvable, int width, int 
 		for (int x = 0; x < width; x++) {
 			grid[y][x] = 0;
 			openedGrid[y][x] = false;
+			coordsArray[x + y * width] = new int[2];
+			coordsArray[x + y * width][0] = y;
+			coordsArray[x + y * width][1] = x;
 		}
 	}
 }
@@ -37,11 +41,26 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 	// TODO proper populating
 	// Make an array with coordinates of bombs: [[x1,y1],[x2,y2],...[xn,yn]]
 	int** bombs = new int* [bombsAmount];
+	int bombsPlaced = 0;
 	for (int i = 0; i < bombsAmount; i++) {
 		bombs[i] = new int[2];
 		// Example bombs are at (i, 2), the third row
 		bombs[i][0] = i;
 		bombs[i][1] = 2;
+		//int amountOfCoords = gridHeight * gridWidth;
+		//int amountOfCoords = 100;
+		int r = rand() % closedTilesCount;
+		//int r = (31 * i) % amountOfCoords;
+		if (bombsPlaced < closedTilesCount) {
+			while (coordsArray[r][0] == -1) {
+				r = (r + 1) % closedTilesCount;
+			}
+			bombs[i][0] = coordsArray[r][0];
+			bombs[i][1] = coordsArray[r][1];
+			coordsArray[r][0] = -1;
+			coordsArray[r][1] = -1;
+			bombsPlaced++;
+		}
 	}
 
 	populateNumbersGrid(bombs);
