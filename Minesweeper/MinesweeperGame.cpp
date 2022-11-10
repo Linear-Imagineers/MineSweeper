@@ -2,7 +2,11 @@
 #include <exception>
 #include <stdexcept>
 #include <string>
+#include <time.h>
+#include <iostream>
+#include <algorithm>
 
+using namespace std;
 MinesweeperGame::MinesweeperGame(int bombsAmount, bool solvable, int width, int height)
 {
 	this->bombsAmount = bombsAmount;
@@ -31,6 +35,10 @@ MinesweeperGame::MinesweeperGame(int bombsAmount, bool solvable, int width, int 
 			coordsArray[x + y * width][1] = x;
 		}
 	}
+	random_shuffle(&coordsArray[0], &coordsArray[width * height]);
+	cout << "test";
+	for (int i = (height * width) - 1; i >= 0; i--)
+		cout << coordsArray[i];
 }
 
 /* Functions for populating the grid */
@@ -40,6 +48,7 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 {
 	// TODO proper populating
 	// Make an array with coordinates of bombs: [[x1,y1],[x2,y2],...[xn,yn]]
+	srand((unsigned)time(NULL));
 	int** bombs = new int* [bombsAmount];
 	int bombsPlaced = 0;
 	for (int i = 0; i < bombsAmount; i++) {
@@ -49,6 +58,7 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 		bombs[i][1] = 2;
 		//int amountOfCoords = gridHeight * gridWidth;
 		//int amountOfCoords = 100;
+		
 		int r = rand() % closedTilesCount;
 		//int r = (31 * i) % amountOfCoords;
 		if (bombsPlaced < closedTilesCount) {
