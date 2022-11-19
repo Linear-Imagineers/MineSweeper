@@ -21,24 +21,6 @@ MinesweeperGame::MinesweeperGame(int bombsAmount, bool solvable, int width, int 
 	grid = new int* [height];
 	openedGrid = new bool* [height];
 	coordsArray = new int* [closedTilesCount];
-
-	// Fill grid and openedGrid 2D arrays with default values
-	for (int y = 0; y < height; y++) {
-		grid[y] = new int[width];
-		openedGrid[y] = new bool[width];
-
-		for (int x = 0; x < width; x++) {
-			grid[y][x] = 0;
-			openedGrid[y][x] = false;
-			coordsArray[x + y * width] = new int[2];
-			coordsArray[x + y * width][0] = y;
-			coordsArray[x + y * width][1] = x;
-		}
-	}
-	random_shuffle(&coordsArray[0], &coordsArray[width * height]);
-	cout << "test";
-	for (int i = (height * width) - 1; i >= 0; i--)
-		cout << coordsArray[i];
 }
 
 /* Functions for populating the grid */
@@ -54,8 +36,8 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 	for (int i = 0; i < bombsAmount; i++) {
 		bombs[i] = new int[2];
 		// Example bombs are at (i, 2), the third row
-		bombs[i][0] = i;
-		bombs[i][1] = 2;
+		//bombs[i][0] = i;
+		//bombs[i][1] = 2;
 		//int amountOfCoords = gridHeight * gridWidth;
 		//int amountOfCoords = 100;
 		
@@ -77,6 +59,33 @@ void MinesweeperGame::populateBombsGrid(int x, int y)
 
 	// The game is on
 	gameState = GameState::active;
+}
+
+void MinesweeperGame::generateGrid(int x_zero, int y_zero) {
+	// Fill grid and openedGrid 2D arrays with default values
+	for (int y = 0; y < gridHeight; y++) {
+		grid[y] = new int[gridWidth];
+		openedGrid[y] = new bool[gridWidth];
+
+		for (int x = 0; x < gridWidth; x++) {
+			grid[y][x] = 0;
+			openedGrid[y][x] = false;
+			coordsArray[x + y * gridWidth] = new int[2];
+			if (x < x_zero - 1 || x > x_zero + 1 || y < y_zero - 1 || y > y_zero + 1) {
+				coordsArray[x + y * gridWidth][0] = x;
+				coordsArray[x + y * gridWidth][1] = y;
+			}
+			else {
+				coordsArray[x + y * gridWidth][0] = -1;
+				coordsArray[x + y * gridWidth][1] = -1;
+			}
+		}
+	}
+	random_shuffle(&coordsArray[0], &coordsArray[closedTilesCount]);
+	cout << "test";
+	for (int i = (closedTilesCount) - 1; i >= 0; i--)
+		cout << coordsArray[i];
+	populateBombsGrid(x_zero, y_zero);
 }
 
 // makes the numbers according to the bombs array given
@@ -107,6 +116,7 @@ void MinesweeperGame::populateNumbersGrid(int** bombs) {
 			}
 		}
 	}
+	//closedTilesCount = gridHeight * gridWidth;
 }
 
 // Reveals to the frontend if the tile is a bomb or not, updates values in backend accordingly
@@ -114,9 +124,8 @@ bool MinesweeperGame::revealTile(int x, int y)
 {
 	// If the grid isn't populated yet, ...
 	if (gameState == GameState::initializing) {
-		// ... populate the grid, now knowing the initially revealed tile
-		// This will set the gameState to active
-		populateBombsGrid(x, y);
+		// ... populate the grid, now knowing the initially revealed tile which will be zero.
+		generateGrid(x, y);
 	}
 
 	// Only allow tile revealing in an active game

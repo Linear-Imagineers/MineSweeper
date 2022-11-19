@@ -9,11 +9,11 @@ GameScreen::GameScreen(wxWindow* parent) :
 {
 	int gridHeight = 10;
 	int gridWidth = 10;
-
+	int bombCount = 30;
 	// TODO improve backend initialization:
 	//			get backend instance passed with argument
 	//			get width and height from backend
-	gameInstance = new MinesweeperGame(40, false, gridWidth, gridHeight);
+	gameInstance = new MinesweeperGame(bombCount, false, gridWidth, gridHeight);
 
 	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
 	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
