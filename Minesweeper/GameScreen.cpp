@@ -2,6 +2,7 @@
 #include <wx/msgdlg.h>
 #include <wx/panel.h>
 #include <wx/wx.h>
+#include <wx/stattext.h>
 #include "MainWindow.h"
 
 GameScreen::GameScreen(wxWindow* parent) :
@@ -9,19 +10,28 @@ GameScreen::GameScreen(wxWindow* parent) :
 {
 	int gridHeight = 10;
 	int gridWidth = 10;
+	bombCount = 21;
 
 	// TODO improve backend initialization:
 	//			get backend instance passed with argument
 	//			get width and height from backend
-	gameInstance = new MinesweeperGame(40, false, gridWidth, gridHeight);
+	gameInstance = new MinesweeperGame(bombCount, false, gridWidth, gridHeight);
 
 	// TODO improve window sizing, preferably make it automatically adjust frame size based on this window.
 	//			includes EVT_SIZE listener, Sizer stuff and SetSizerAndFit call
 	// Set appropriate window size
 	parent->SetSize(gridWidth * (Tile::size + 1) - 1 + 17, gridHeight * (Tile::size + 1) - 1 + 40);
 
+	// Container for all elements
+	wxBoxSizer* containerSizer = new wxBoxSizer(wxVERTICAL);
+
 	// A wxGridSizer will allign all the tiles in a grid formation
-	wxGridSizer* sizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
+	wxGridSizer* gridSizer = new wxGridSizer(gridHeight, gridWidth, wxSize(1, 1));
+	
+	wxString bombsLeft = wxString::Format(wxT("%i"), bombCount); // Converting the amount of bombs left to wxString format
+	wxString bombsRemaining = "Bombs remaining: " + bombsLeft; // Combining the 2 strings for final message
+	this->bombCounter = new wxStaticText(this, wxID_ANY, bombsRemaining);
+	containerSizer->Add(bombCounter, 0, wxALIGN_LEFT | wxTOP | wxBOTTOM | wxLEFT, 10);
 
 	// Initialize grid
 	tiles = new Tile ** [gridHeight];
@@ -38,12 +48,13 @@ GameScreen::GameScreen(wxWindow* parent) :
 			// Add wxTile object to the grid sizer
 			// The order in which items are added to the sizer matters:
 			//   (0,0), (0,1) then (0,2) etc
-			sizer->Add(tiles[y][x]);
+			gridSizer->Add(tiles[y][x]);
 		}
 	}
 
 	// Add sizer to the wxPanel and make it fit all tiles
-	this->SetSizerAndFit(sizer);
+	containerSizer->Add(gridSizer);
+	this->SetSizerAndFit(containerSizer);
 
 	// Bind the resize event
 	Bind(wxEVT_SIZE, &GameScreen::resize, this);
@@ -194,17 +205,21 @@ void GameScreen::Tile::rightClick(wxMouseEvent& event)
 		// Flag a closed tile
 		this->state = State::flag;
 		this->gameScreen->currentFlags += 1;
+		this->gameScreen->bombCount -= 1;
 	}
 	else if (this->state == State::flag) {
 		// Unflag a flagged tile
 		this->state = State::closed;
 		this->gameScreen->currentFlags -= 1;
+		this->gameScreen->bombCount += 1;
 	}
 	else {
 		return;
 	}
-	
-	// Update the displayed (bitmap) state
+
+	wxString bombsLeft = wxString::Format(wxT("%i"), this->gameScreen->bombCount); // Converting the amount of bombs left to wxString format
+	wxString bombsRemaining = "Bombs remaining: " + bombsLeft; // Combining the 2 strings for final message
+	this->gameScreen->bombCounter->SetLabel(bombsRemaining); // Update static text with new label
 	this->Refresh();
 }
 

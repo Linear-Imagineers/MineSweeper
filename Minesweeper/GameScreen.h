@@ -5,6 +5,7 @@
 #include <wx/event.h>
 #include "GameOverScreen.h"
 #include "MinesweeperGame.h"
+#include <wx/stattext.h>
 
 class GameScreen : public wxPanel {
 public:
@@ -51,6 +52,8 @@ public:
 		// The state of this tile
 		State state;
 
+		// Updates bombcounter
+
 		// End of the game when a change in gameState has been noticed, gives popup message and reveals all tiles
 		void gameEnd();
 
@@ -67,9 +70,11 @@ public:
 private:
 	// Pointer to the current game that is being played
 	MinesweeperGame* gameInstance;
+	wxStaticText* bombCounter;
 
 	// Keep track of the amount of current flags on the grid
 	int currentFlags = 0;
+	int bombCount;
 
 	// Dynamic array to all the tiles
 	Tile*** tiles;
