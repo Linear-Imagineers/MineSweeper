@@ -82,4 +82,8 @@ private:
 	// Returns the given coordinates formatted as '(x, y)'
 	// used in creating exception messages
 	std::string formatCoords(int x, int y);
+
+	// regenerate grid with location of coordinates x and y be a zero tile.
+	void generateGrid(int x, int y);
+
 };
