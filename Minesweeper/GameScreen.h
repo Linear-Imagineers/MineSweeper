@@ -78,7 +78,4 @@ private:
 
 	// Dynamic array to all the tiles
 	Tile*** tiles;
-
-	// Keep track of the amount of bombs on the grid
-	int bombCount;
 };
